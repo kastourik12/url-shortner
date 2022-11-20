@@ -12,10 +12,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import javax.validation.ConstraintViolationException;
 
-/**
- *
- * @author ok
- */
 @ControllerAdvice
 public class GlobalExceptionHandler {
 

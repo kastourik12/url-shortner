@@ -5,8 +5,9 @@
 
 package com.kastourik12.urlshortener.controllers;
 
-import com.kastourik12.urlshortener.payloads.request.ShortUrlCreationPayload;
-import com.kastourik12.urlshortener.services.UrlService;
+import com.kastourik12.urlshortener.payloads.request.ShortUrlCreationRequest;
+import com.kastourik12.urlshortener.payloads.response.ShortUrlCreationResponse;
+import com.kastourik12.urlshortener.services.ShortUrlService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -16,28 +17,26 @@ import org.springframework.web.servlet.view.RedirectView;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-/**
- *
- * @author ok
- */
-@RestController("short/")
+
+@RestController
+@RequestMapping("/re")
 @RequiredArgsConstructor
 @Slf4j
 public class ShortUrlController {
 
     
-    private final UrlService urlService;
+    private final ShortUrlService urlService;
 
 
     @PostMapping("/create")
-    public ResponseEntity<String> convertToShortUrl(@RequestBody @Valid ShortUrlCreationPayload longUrl){
+    public ResponseEntity<ShortUrlCreationResponse> convertToShortUrl(@RequestBody @Valid ShortUrlCreationRequest longUrl){
         log.info(" Trying to create short Url for :" + longUrl.getUrl());
 
-        return ResponseEntity.ok("http://localhost:8082/"+urlService.convertToShortUrl(longUrl));
+        return ResponseEntity.ok(urlService.convertToShortUrl(longUrl));
     }
 
     @GetMapping("/{shortUrl}")
-    public RedirectView getAndRedirect(@PathVariable String shortUrl, HttpServletRequest request){
+    public RedirectView getAndRedirect(@PathVariable String shortUrl){
         return urlService.redirectToOriginalUrl(shortUrl);
     }
 }

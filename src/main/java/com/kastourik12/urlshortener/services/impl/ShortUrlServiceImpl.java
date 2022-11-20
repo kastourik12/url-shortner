@@ -8,17 +8,20 @@ package com.kastourik12.urlshortener.services.impl;
 import com.kastourik12.urlshortener.exceptions.NotValidUrlException;
 import com.kastourik12.urlshortener.exceptions.ResourceNotFoundException;
 import com.kastourik12.urlshortener.models.LongUrl;
-import com.kastourik12.urlshortener.payloads.request.ShortUrlCreationPayload;
+import com.kastourik12.urlshortener.payloads.request.ShortUrlCreationRequest;
+import com.kastourik12.urlshortener.payloads.response.ShortUrlCreationResponse;
 import com.kastourik12.urlshortener.repositories.LongUrlRepository;
 import com.kastourik12.urlshortener.services.CoderService;
-import com.kastourik12.urlshortener.services.UrlService;
+import com.kastourik12.urlshortener.services.ShortUrlService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.transaction.Transactional;
 import java.net.URL;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,9 +31,10 @@ import java.util.Optional;
  */
 
 @Service
-@Transactional 
+@Transactional
+@Slf4j
 @RequiredArgsConstructor
-public class UrlServiceImpl implements UrlService {
+public class ShortUrlServiceImpl implements ShortUrlService {
     
     private final LongUrlRepository urlRepository;
     private final CoderService coderService;
@@ -38,31 +42,44 @@ public class UrlServiceImpl implements UrlService {
     
 
     @Override
-    public String convertToShortUrl(ShortUrlCreationPayload longUrl) {
-        if(isValidUrl(longUrl.getUrl()))
+    public ShortUrlCreationResponse convertToShortUrl(ShortUrlCreationRequest creationRequest) {
+
+        if(!isValidUrl(creationRequest.getUrl()))
+
             throw new NotValidUrlException();
 
-        Optional<LongUrl> optionalUrl = urlRepository.findByLongUrl(longUrl.getUrl());
-
-        LongUrl url ;
-
-        if(optionalUrl.isPresent()){
-
-            url = optionalUrl.get();
-            url.setShortenedTimes(url.getShortenedTimes() + 1);
-            updateUrlEntity(url);
-
-            return coderService.codeIdToShortUrl(optionalUrl.get().getId());
-        }
         else {
 
-            url = new LongUrl();
-            url.setAccessedTime(0L);
-            url.setShortenedTimes(1);
-            url = urlRepository.save(url);
+            Optional<LongUrl> optionalUrl = urlRepository.findByLongUrl(creationRequest.getUrl());
 
-            return coderService.codeIdToShortUrl(url.getId());
-        }
+            LongUrl url ;
+
+            if(optionalUrl.isPresent()){
+
+                url = optionalUrl.get();
+                url.setShortenedTimes(url.getShortenedTimes() + 1);
+                updateUrlEntity(url);
+
+            }
+            else {
+
+                url = new LongUrl();
+                url.setAccessedTime(0L);
+                url.setShortenedTimes(1);
+                url.setLongUrl(creationRequest.getUrl());
+                url.setCreatedAt(new Date());
+                url = urlRepository.save(url);
+
+            }
+
+            return ShortUrlCreationResponse
+                    .builder()
+                    .url("http://localhost:8082/re/" + coderService.codeIdToShortUrl(url.getId()))
+                    .shortenedTimes(url.getShortenedTimes())
+                    .visitedTimes(url.getAccessedTime())
+                    .build();}
+
+
     }
 
 
@@ -77,9 +94,9 @@ public class UrlServiceImpl implements UrlService {
         url.setAccessedTime( url.getAccessedTime() + 1 );
 
         updateUrlEntity(url); // async func for updating the entity
-
+        log.info(url.getLongUrl());
         RedirectView redirectView = new RedirectView();
-        redirectView.setUrl("http://" + url.getLongUrl());
+        redirectView.setUrl(url.getLongUrl());
 
 
         return  redirectView;
@@ -99,12 +116,16 @@ public class UrlServiceImpl implements UrlService {
     {
         /* Try creating a valid URL */
         try {
+
             new URL(url).toURI();
+
             return true;
+
         }
         // If there was an Exception
         // while creating URL object
         catch (Exception e) {
+
             return false;
         }
     }

@@ -7,7 +7,7 @@ import lombok.Setter;
 import javax.validation.constraints.NotBlank;
 
 @Getter @NoArgsConstructor @Setter
-public class ShortUrlCreationPayload {
+public class ShortUrlCreationRequest {
     @NotBlank
     private String url;
 }

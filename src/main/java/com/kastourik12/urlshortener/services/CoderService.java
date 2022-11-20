@@ -11,7 +11,7 @@ package com.kastourik12.urlshortener.services;
  * @author ok
  */
 public interface CoderService {
-    public String codeIdToShortUrl(Long id);
-    public Long decodeShortUrlToId(String shortUrl);
+    String codeIdToShortUrl(Long id);
+    Long decodeShortUrlToId(String shortUrl);
 
 }
