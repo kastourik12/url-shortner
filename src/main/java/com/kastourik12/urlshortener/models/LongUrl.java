@@ -3,18 +3,16 @@ package com.kastourik12.urlshortener.models;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 import java.util.Date;
 
 
 @Entity
 @AllArgsConstructor @NoArgsConstructor
 @Getter @Setter @Builder
-public class LongUrl {
+public class LongUrl implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,9 +21,12 @@ public class LongUrl {
     @NotBlank(message = "url should not be empty")
     private String longUrl;
 
+    @Column(unique = true)
+    private String shortUrl;
+
     private Integer shortenedTimes;
 
-    private Long accessedTime;
+    private Long visitedTime;
 
     @CreatedDate
     private Date createdAt;

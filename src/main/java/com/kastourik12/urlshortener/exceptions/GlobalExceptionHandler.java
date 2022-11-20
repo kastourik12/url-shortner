@@ -26,8 +26,13 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(value = NotValidUrlException.class)
-    public ResponseEntity<?> UrlIsNotValid(NotValidUrlException exception){
+    public ResponseEntity<?> UrlIsNotValid(){
         return new ResponseEntity<>("URL should be valid",HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = UnAuthorizedException.class)
+    public ResponseEntity<?> BadCredentials(){
+        return new ResponseEntity<>("Bad Credentials",HttpStatus.BAD_REQUEST);
     }
 
     

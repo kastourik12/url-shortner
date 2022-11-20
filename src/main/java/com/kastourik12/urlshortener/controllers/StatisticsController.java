@@ -7,6 +7,7 @@ import com.kastourik12.urlshortener.services.StatisticService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class StatisticsController {
     private final StatisticService statisticService;
-    @GetMapping("/all")
+    @GetMapping("/all") @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<List<LongUrl>> getAll(){
         return  ResponseEntity.ok(statisticService.getAllUrls());
     }

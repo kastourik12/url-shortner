@@ -6,7 +6,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     show-sql: true
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 server:
@@ -20,3 +20,6 @@ jwt:
   token:
     secret-key: secretKey
     expiration: 900000 # 15 minute duration
+rsa:
+  private-key: classpath:certs/private.pem
+  public-key: classpath:certs/public.pem

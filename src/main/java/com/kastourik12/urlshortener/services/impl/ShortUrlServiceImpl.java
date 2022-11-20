@@ -64,20 +64,23 @@ public class ShortUrlServiceImpl implements ShortUrlService {
             else {
 
                 url = new LongUrl();
-                url.setAccessedTime(0L);
+                url.setVisitedTime(0L);
                 url.setShortenedTimes(1);
                 url.setLongUrl(creationRequest.getUrl());
                 url.setCreatedAt(new Date());
                 url = urlRepository.save(url);
+                url.setShortUrl(coderService.codeIdToShortUrl(url.getId()));
+                updateUrlEntity(url);
 
             }
 
             return ShortUrlCreationResponse
                     .builder()
-                    .url("http://localhost:8082/re/" + coderService.codeIdToShortUrl(url.getId()))
+                    .url("http://localhost:8082/re/" + url.getShortUrl())
                     .shortenedTimes(url.getShortenedTimes())
-                    .visitedTimes(url.getAccessedTime())
-                    .build();}
+                    .visitedTimes(url.getVisitedTime())
+                    .build();
+        }
 
 
     }
@@ -91,7 +94,7 @@ public class ShortUrlServiceImpl implements ShortUrlService {
                         () -> new ResourceNotFoundException(shortUrl)
                     );
 
-        url.setAccessedTime( url.getAccessedTime() + 1 );
+        url.setVisitedTime( url.getVisitedTime() + 1 );
 
         updateUrlEntity(url); // async func for updating the entity
         log.info(url.getLongUrl());

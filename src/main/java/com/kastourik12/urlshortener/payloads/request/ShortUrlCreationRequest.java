@@ -8,6 +8,9 @@ import javax.validation.constraints.NotBlank;
 
 @Getter @NoArgsConstructor @Setter
 public class ShortUrlCreationRequest {
+
     @NotBlank
     private String url;
+
+
 }
