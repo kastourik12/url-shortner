@@ -21,9 +21,6 @@ public class LongUrl implements Serializable {
     @NotBlank(message = "url should not be empty")
     private String longUrl;
 
-    @Column(unique = true)
-    private String shortUrl;
-
     private Integer shortenedTimes;
 
     private Long visitedTime;

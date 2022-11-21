@@ -1,12 +1,11 @@
 package com.kastourik12.urlshortener.payloads.request;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 
-@Getter @NoArgsConstructor @Setter
+@Data
+@AllArgsConstructor
 public class ShortUrlCreationRequest {
 
     @NotBlank

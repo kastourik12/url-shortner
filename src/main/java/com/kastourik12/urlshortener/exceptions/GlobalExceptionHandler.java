@@ -5,6 +5,7 @@
 
 package com.kastourik12.urlshortener.exceptions;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import javax.validation.ConstraintViolationException;
 
 @ControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = ResourceNotFoundException.class)
@@ -25,7 +27,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(exception.getConstraintViolations(),HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(value = invalidUrlException.class)
+    @ExceptionHandler(value = InvalidUrlException.class)
     public ResponseEntity<?> UrlIsNotValid(){
         return new ResponseEntity<>("URL should be valid",HttpStatus.BAD_REQUEST);
     }
@@ -39,4 +41,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> UsernameExists(){
         return new ResponseEntity<>("Username alreay exists",HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(value = Exception.class)
+    public ResponseEntity<?> globalExceptions(Exception exception){
+        log.error(exception.getMessage());
+        return new ResponseEntity<>("Service unavailable try later ",HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+
 }

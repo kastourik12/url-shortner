@@ -5,7 +5,7 @@
 
 package com.kastourik12.urlshortener.services.impl;
 
-import com.kastourik12.urlshortener.exceptions.invalidUrlException;
+import com.kastourik12.urlshortener.exceptions.InvalidUrlException;
 import com.kastourik12.urlshortener.exceptions.ResourceNotFoundException;
 import com.kastourik12.urlshortener.models.LongUrl;
 import com.kastourik12.urlshortener.payloads.request.ShortUrlCreationRequest;
@@ -44,7 +44,7 @@ public class ShortUrlServiceImpl implements ShortUrlService {
     @Override
     public ShortUrlCreationResponse convertToShortUrl(ShortUrlCreationRequest request) {
 
-        if(!isValidUrl(request.getUrl()))
+        if(isNotValidUrl(request.getUrl()))
         {
             String[] u = request.getUrl().split("\\.");
 
@@ -52,11 +52,9 @@ public class ShortUrlServiceImpl implements ShortUrlService {
 
                 request.setUrl("https://" + request.getUrl());
 
-            if (!isValidUrl(request.getUrl()))
-                throw new invalidUrlException();
+            if (isNotValidUrl(request.getUrl()))
+                throw new InvalidUrlException();
         }
-
-
 
         Optional<LongUrl> optionalUrl = urlRepository.findByLongUrl(request.getUrl());
 
@@ -77,14 +75,11 @@ public class ShortUrlServiceImpl implements ShortUrlService {
                 url.setLongUrl(request.getUrl());
                 url.setCreatedAt(new Date());
                 url = urlRepository.save(url);
-                url.setShortUrl(coderService.codeIdToShortUrl(url.getId()));
-                updateUrlEntity(url);
-
             }
 
         return ShortUrlCreationResponse
                     .builder()
-                    .url("http://localhost:8082/re/" + url.getShortUrl())
+                    .url("http://localhost:8082/re/" + coderService.codeIdToShortUrl(url.getId()))
                     .shortenedTimes(url.getShortenedTimes())
                     .visitedTimes(url.getVisitedTime())
                     .build();
@@ -123,21 +118,21 @@ public class ShortUrlServiceImpl implements ShortUrlService {
         urlRepository.save(url);
     }
 
-    private boolean isValidUrl(String url)
+    private boolean isNotValidUrl(String url)
     {
         /* Try creating a valid URL */
         try {
 
             new URL(url).toURI();
 
-            return true;
+            return false;
 
         }
         // If there was an Exception
         // while creating URL object
         catch (Exception e) {
 
-            return false;
+            return true;
         }
     }
 
