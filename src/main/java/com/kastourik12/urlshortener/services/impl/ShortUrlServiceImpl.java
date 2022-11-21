@@ -5,6 +5,7 @@
 
 package com.kastourik12.urlshortener.services.impl;
 
+import com.kastourik12.urlshortener.events.VisitEvent;
 import com.kastourik12.urlshortener.exceptions.InvalidUrlException;
 import com.kastourik12.urlshortener.exceptions.ResourceNotFoundException;
 import com.kastourik12.urlshortener.models.LongUrl;
@@ -13,12 +14,15 @@ import com.kastourik12.urlshortener.payloads.response.ShortUrlCreationResponse;
 import com.kastourik12.urlshortener.repositories.LongUrlRepository;
 import com.kastourik12.urlshortener.services.CoderService;
 import com.kastourik12.urlshortener.services.ShortUrlService;
+import com.kastourik12.urlshortener.services.TokenService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.view.RedirectView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.net.URL;
 import java.util.Date;
@@ -38,25 +42,28 @@ public class ShortUrlServiceImpl implements ShortUrlService {
     
     private final LongUrlRepository urlRepository;
     private final CoderService coderService;
+
+    private final TokenService tokenService;
+    private final ApplicationEventPublisher eventPublisher;
     
     
 
     @Override
-    public ShortUrlCreationResponse convertToShortUrl(ShortUrlCreationRequest request) {
+    public ShortUrlCreationResponse convertToShortUrl(ShortUrlCreationRequest payload) {
 
-        if(isNotValidUrl(request.getUrl()))
+        if(isNotValidUrl(payload.getUrl()))
         {
-            String[] u = request.getUrl().split("\\.");
+            String[] u = payload.getUrl().split("\\.");
 
             if( u.length  > 1 && !u[0].isEmpty() && !u[1].isEmpty() )
 
-                request.setUrl("https://" + request.getUrl());
+                payload.setUrl("https://" + payload.getUrl());
 
-            if (isNotValidUrl(request.getUrl()))
+            if (isNotValidUrl(payload.getUrl()))
                 throw new InvalidUrlException();
         }
 
-        Optional<LongUrl> optionalUrl = urlRepository.findByLongUrl(request.getUrl());
+        Optional<LongUrl> optionalUrl = urlRepository.findByLongUrl(payload.getUrl());
 
         LongUrl url ;
 
@@ -72,7 +79,7 @@ public class ShortUrlServiceImpl implements ShortUrlService {
                 url = new LongUrl();
                 url.setVisitedTime(0L);
                 url.setShortenedTimes(1);
-                url.setLongUrl(request.getUrl());
+                url.setLongUrl(payload.getUrl());
                 url.setCreatedAt(new Date());
                 url = urlRepository.save(url);
             }
@@ -90,7 +97,7 @@ public class ShortUrlServiceImpl implements ShortUrlService {
 
 
     @Override
-    public RedirectView redirectToOriginalUrl(String shortUrl) {
+    public RedirectView redirectToOriginalUrl(String shortUrl, HttpServletRequest request) {
         Long id = coderService.decodeShortUrlToId(shortUrl);
         LongUrl url = urlRepository.findById(id)
                     .orElseThrow(
@@ -98,13 +105,13 @@ public class ShortUrlServiceImpl implements ShortUrlService {
                     );
 
         url.setVisitedTime( url.getVisitedTime() + 1 );
-
         updateUrlEntity(url); // async func for updating the entity
-        log.info(url.getLongUrl());
+
+        if(tokenService.isRequestContainsValidToken(request))
+            eventPublisher.publishEvent(new VisitEvent(url));
+
         RedirectView redirectView = new RedirectView();
         redirectView.setUrl(url.getLongUrl());
-
-
         return  redirectView;
     }
 

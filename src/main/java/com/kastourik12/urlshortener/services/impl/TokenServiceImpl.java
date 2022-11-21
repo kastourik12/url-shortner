@@ -1,23 +1,30 @@
 package com.kastourik12.urlshortener.services.impl;
 
 import com.kastourik12.urlshortener.services.TokenService;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.oauth2.jwt.JwtClaimsSet;
-import org.springframework.security.oauth2.jwt.JwtEncoder;
-import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
+import org.springframework.security.oauth2.jwt.*;
+import org.springframework.security.oauth2.server.resource.web.BearerTokenResolver;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
+@RequiredArgsConstructor @Slf4j
 public class TokenServiceImpl implements TokenService {
 
     private final JwtEncoder jwtEncoder;
+
+    private final JwtDecoder jwtDecoder;
+
+    private final BearerTokenResolver tokenResolver;
 
 
     @Override
@@ -34,6 +41,18 @@ public class TokenServiceImpl implements TokenService {
                 .claim("scope",scope)
                 .build();
         return this.jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
+    }
+
+    @Override
+    public Boolean isRequestContainsValidToken(HttpServletRequest request) {
+        log.info(request.toString());
+        try {
+            String token =tokenResolver.resolve(request);
+            return jwtDecoder.decode(token).getExpiresAt().isAfter(Instant.now());
+        }
+        catch (Exception e){
+            return false;
+        }
     }
 
 

@@ -8,10 +8,12 @@ package com.kastourik12.urlshortener.exceptions;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import javax.validation.ConstraintViolationException;
+import java.util.Arrays;
 
 @ControllerAdvice
 @Slf4j
@@ -41,10 +43,13 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> UsernameExists(){
         return new ResponseEntity<>("Username alreay exists",HttpStatus.BAD_REQUEST);
     }
-
+    @ExceptionHandler(value = AccessDeniedException.class)
+    public ResponseEntity<?> accessDeniedException(){
+        return new ResponseEntity<>("Not Authorized", HttpStatus.FORBIDDEN);
+    }
     @ExceptionHandler(value = Exception.class)
     public ResponseEntity<?> globalExceptions(Exception exception){
-        log.error(exception.getMessage());
+        log.error(exception.getClass().getName(),exception.getMessage());
         return new ResponseEntity<>("Service unavailable try later ",HttpStatus.INTERNAL_SERVER_ERROR);
     }
 

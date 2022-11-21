@@ -10,10 +10,10 @@ public class CoderServiceImpl implements CoderService {
     private static final String allowedString = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     
     
-    private char[] allowedCharacters = allowedString.toCharArray();
+    private final char[] allowedCharacters = allowedString.toCharArray();
     
     
-    private int base = allowedCharacters.length;
+    private final int base = allowedCharacters.length;
     
     @Override
     public String codeIdToShortUrl(Long id) {
