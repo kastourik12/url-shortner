@@ -22,6 +22,7 @@ public class StatisticsController {
 
     @GetMapping("/all")
     public ResponseEntity<List<LongUrl>> getAll(){
+
         return  ResponseEntity.ok(statisticService.getAllUrls());
     }
 
