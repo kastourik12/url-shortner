@@ -32,6 +32,7 @@ public class ShortUrlController {
 
     @PostMapping("/create")
     public ResponseEntity<ShortUrlCreationResponse> convertToShortUrl(@RequestBody @Valid ShortUrlCreationRequest longUrl){
+
         log.info(" Trying to create short Url for :" + longUrl.getUrl());
 
         return ResponseEntity.ok(urlService.convertToShortUrl(longUrl));

@@ -106,8 +106,8 @@ public class ShortUrlServiceImpl implements ShortUrlService {
 
         url.setVisitedTime( url.getVisitedTime() + 1 );
         updateUrlEntity(url); // async func for updating the entity
-        if(tokenService.isRequestContainsValidToken(request))
 
+        if(tokenService.isRequestContainsValidToken(request))
             eventPublisher.publishEvent(new VisitEvent(url));
 
         RedirectView redirectView = new RedirectView();

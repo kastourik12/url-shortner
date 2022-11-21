@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5432}/${POSTGRES_DB:test_db}
-    username: ${POSTGRES_USER:postgres}
-    password: ${POSTGRES_PASSWORD:admin}
+    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5432}/${POSTGRES_DB:users}
+    username: ${POSTGRES_USER:test}
+    password: ${POSTGRES_PASSWORD:root}
 
   jpa:
     hibernate:
