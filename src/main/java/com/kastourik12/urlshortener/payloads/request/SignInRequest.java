@@ -1,15 +1,16 @@
 package com.kastourik12.urlshortener.payloads.request;
 
-import lombok.*;
+import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 
 @Data
-@AllArgsConstructor
-public class ShortUrlCreationRequest {
+public class SignInRequest {
 
     @NotBlank
-    private String url;
+    private String username;
 
+    @NotBlank
+    private String password;
 
 }

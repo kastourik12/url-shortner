@@ -37,8 +37,8 @@ public class CoderServiceImpl implements CoderService {
 
         //counter is used to avoid reversing input string
         var counter = 1;
-        for (int i = 0; i < length; i++) {
-            decoded += allowedString.indexOf(characters[i]) * Math.pow(base, length - counter);
+        for (char character : characters) {
+            decoded += allowedString.indexOf(character) * Math.pow(base, length - counter);
             counter++;
         }
         return decoded;
