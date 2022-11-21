@@ -17,7 +17,7 @@ import java.util.Date;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor @Slf4j
+@RequiredArgsConstructor
 public class TokenServiceImpl implements TokenService {
 
     private final JwtEncoder jwtEncoder;
@@ -45,7 +45,6 @@ public class TokenServiceImpl implements TokenService {
 
     @Override
     public Boolean isRequestContainsValidToken(HttpServletRequest request) {
-        log.info(request.toString());
         try {
             String token =tokenResolver.resolve(request);
             return jwtDecoder.decode(token).getExpiresAt().isAfter(Instant.now());

@@ -62,8 +62,8 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeRequests( auth ->
                         auth
-                                .antMatchers("/re/create","/auth/*").permitAll()
-                                .antMatchers("/re/*").permitAll()
+                                .antMatchers("/re/*","/auth/*").permitAll()
+
                         )
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
                 .sessionManagement( session  -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
