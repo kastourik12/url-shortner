@@ -5,7 +5,7 @@
 
 package com.kastourik12.urlshortener.services.impl;
 
-import com.kastourik12.urlshortener.exceptions.NotValidUrlException;
+import com.kastourik12.urlshortener.exceptions.invalidUrlException;
 import com.kastourik12.urlshortener.exceptions.ResourceNotFoundException;
 import com.kastourik12.urlshortener.models.LongUrl;
 import com.kastourik12.urlshortener.payloads.request.ShortUrlCreationRequest;
@@ -42,31 +42,39 @@ public class ShortUrlServiceImpl implements ShortUrlService {
     
 
     @Override
-    public ShortUrlCreationResponse convertToShortUrl(ShortUrlCreationRequest creationRequest) {
+    public ShortUrlCreationResponse convertToShortUrl(ShortUrlCreationRequest request) {
 
-        if(!isValidUrl(creationRequest.getUrl()))
+        if(!isValidUrl(request.getUrl()))
+        {
+            String[] u = request.getUrl().split("\\.");
 
-            throw new NotValidUrlException();
+            if( u.length  > 1 && !u[0].isEmpty() && !u[1].isEmpty() )
 
-        else {
+                request.setUrl("https://" + request.getUrl());
 
-            Optional<LongUrl> optionalUrl = urlRepository.findByLongUrl(creationRequest.getUrl());
+            if (!isValidUrl(request.getUrl()))
+                throw new invalidUrlException();
+        }
 
-            LongUrl url ;
 
-            if(optionalUrl.isPresent()){
+
+        Optional<LongUrl> optionalUrl = urlRepository.findByLongUrl(request.getUrl());
+
+        LongUrl url ;
+
+        if(optionalUrl.isPresent()){
 
                 url = optionalUrl.get();
                 url.setShortenedTimes(url.getShortenedTimes() + 1);
                 updateUrlEntity(url);
 
             }
-            else {
+        else {
 
                 url = new LongUrl();
                 url.setVisitedTime(0L);
                 url.setShortenedTimes(1);
-                url.setLongUrl(creationRequest.getUrl());
+                url.setLongUrl(request.getUrl());
                 url.setCreatedAt(new Date());
                 url = urlRepository.save(url);
                 url.setShortUrl(coderService.codeIdToShortUrl(url.getId()));
@@ -74,13 +82,13 @@ public class ShortUrlServiceImpl implements ShortUrlService {
 
             }
 
-            return ShortUrlCreationResponse
+        return ShortUrlCreationResponse
                     .builder()
                     .url("http://localhost:8082/re/" + url.getShortUrl())
                     .shortenedTimes(url.getShortenedTimes())
                     .visitedTimes(url.getVisitedTime())
                     .build();
-        }
+
 
 
     }

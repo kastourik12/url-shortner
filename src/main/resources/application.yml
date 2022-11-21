@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5432}/${POSTGRES_DB:users}
-    username: ${POSTGRES_USER:test}
-    password: ${POSTGRES_PASSWORD:root}
+    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5432}/${POSTGRES_DB:test_db}
+    username: ${POSTGRES_USER:postgres}
+    password: ${POSTGRES_PASSWORD:admin}
 
   jpa:
     hibernate:
@@ -14,12 +14,7 @@ server:
 
 
 
-
 # JWT TOKEN
-jwt:
-  token:
-    secret-key: secretKey
-    expiration: 900000 # 15 minute duration
 rsa:
   private-key: classpath:certs/private.pem
   public-key: classpath:certs/public.pem

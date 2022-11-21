@@ -16,9 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/stats")
 @RequiredArgsConstructor
 @Slf4j
+@PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
 public class StatisticsController {
     private final StatisticService statisticService;
-    @GetMapping("/all") @PreAuthorize("hasRole('ROLE_USER')")
+
+    @GetMapping("/all")
     public ResponseEntity<List<LongUrl>> getAll(){
         return  ResponseEntity.ok(statisticService.getAllUrls());
     }

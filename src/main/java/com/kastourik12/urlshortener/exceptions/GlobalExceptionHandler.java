@@ -25,7 +25,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(exception.getConstraintViolations(),HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(value = NotValidUrlException.class)
+    @ExceptionHandler(value = invalidUrlException.class)
     public ResponseEntity<?> UrlIsNotValid(){
         return new ResponseEntity<>("URL should be valid",HttpStatus.BAD_REQUEST);
     }
@@ -35,5 +35,8 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>("Bad Credentials",HttpStatus.BAD_REQUEST);
     }
 
-    
+    @ExceptionHandler(value = UsernameExistsException.class)
+    public ResponseEntity<?> UsernameExists(){
+        return new ResponseEntity<>("Username alreay exists",HttpStatus.BAD_REQUEST);
+    }
 }

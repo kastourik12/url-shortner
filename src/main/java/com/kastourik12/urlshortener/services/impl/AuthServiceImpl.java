@@ -2,6 +2,7 @@ package com.kastourik12.urlshortener.services.impl;
 
 import com.kastourik12.urlshortener.exceptions.ResourceNotFoundException;
 import com.kastourik12.urlshortener.exceptions.UnAuthorizedException;
+import com.kastourik12.urlshortener.exceptions.UsernameExistsException;
 import com.kastourik12.urlshortener.models.ERole;
 import com.kastourik12.urlshortener.models.Role;
 import com.kastourik12.urlshortener.models.User;
@@ -38,7 +39,7 @@ public class AuthServiceImpl implements AuthService {
     public void saveUser(SignUpRequest request) {
 
         if(userRepository.findByUsername(request.getUsername()).isPresent())
-            throw new RuntimeException();
+            throw new UsernameExistsException();
 
         User user = new User();
         user.setUsername(request.getUsername());
