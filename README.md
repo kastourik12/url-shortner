@@ -43,7 +43,7 @@ test_db=#  INSERT INTO roles (id,name) VALUES (2,'ROLE_ADMIN');
 ------------
 
 > Make sure you have access to local or any Postgres server
-> this is was built using apache-maven-3.8.6 & java 17.0.4
+> apache-maven-3.8.6 & java 17.0.4
 
 
 $  ./mvnw spring-boot:run
