@@ -12,14 +12,18 @@ import com.kastourik12.urlshortener.repositories.RoleRepository;
 import com.kastourik12.urlshortener.repositories.UserRepository;
 import com.kastourik12.urlshortener.services.AuthService;
 import com.kastourik12.urlshortener.services.TokenService;
+import com.nimbusds.jose.proc.SecurityContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.security.Security;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -45,7 +49,7 @@ public class AuthServiceImpl implements AuthService {
         user.setPassword(encoder.encode(request.getPassword()));
         if(request.getRoles() == null) {
             Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                    .orElseThrow();
+                    .orElse(roleRepository.save(new Role(ERole.ROLE_USER)));
             Set<Role> roles = new HashSet<>();
             roles.add(userRole);
             user.setRoles(roles);
@@ -73,15 +77,26 @@ public class AuthServiceImpl implements AuthService {
 
     }
 
+    @Override
+    public User getCurrentUser() {
+        try {
+
+            String username = SecurityContextHolder.getContext().getAuthentication().getName();
+            return userRepository.findByUsername(username).orElseThrow(UnAuthorizedException::new);
+
+        }catch (Exception exception){
+            throw new UnAuthorizedException();
+        }
+
+    }
+
+
     private Set<Role> getRoles(String [] roles){
 
         Set<Role> userRoles = new HashSet<>();
         for(String role : roles) {
             userRoles.add(roleRepository.findByName(Enum.valueOf(ERole.class,role))
-                    .orElseThrow(
-                            () -> new
-                                    ResourceNotFoundException(String.format("There is no role with the name %s",role))
-                    )
+                    .orElse(roleRepository.save(new Role(Enum.valueOf(ERole.class,role))))
             );
         }
         return userRoles;

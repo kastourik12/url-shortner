@@ -108,6 +108,7 @@ public class ShortUrlServiceImpl implements ShortUrlService {
 
         updateUrlEntity(url); // async func for updating url entity
 
+
         if(tokenService.isRequestContainsValidToken(request))
             eventPublisher.publishEvent(new VisitEvent(url));
 

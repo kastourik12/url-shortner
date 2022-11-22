@@ -1,5 +1,6 @@
 package com.kastourik12.urlshortener.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,6 +20,7 @@ public class Visit implements Serializable {
     @CreatedDate
     private Date createdAt;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "fk_user")
     private User user;

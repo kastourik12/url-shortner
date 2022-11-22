@@ -3,13 +3,18 @@ spring:
     url: jdbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5432}/${POSTGRES_DB:test_db}
     username: ${POSTGRES_USER:postgres}
     password: ${POSTGRES_PASSWORD:admin}
+    driverClassName: org.postgresql.Driver
 
 
   jpa:
+    defer-datasource-initialization: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
     show-sql: true
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+
+
+
 server:
   port: 8082
 
