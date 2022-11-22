@@ -101,11 +101,13 @@ public class ShortUrlServiceImpl implements ShortUrlService {
         Long id = coderService.decodeShortUrlToId(shortUrl);
         LongUrl url = urlRepository.findById(id)
                     .orElseThrow(
-                        () -> new ResourceNotFoundException(shortUrl)
+                        () -> new ResourceNotFoundException("there no url for this short")
                     );
 
         url.setVisitedTime( url.getVisitedTime() + 1 );
-        updateUrlEntity(url); // async func for updating the entity
+
+        updateUrlEntity(url); // async func for updating url entity
+
 
         if(tokenService.isRequestContainsValidToken(request))
             eventPublisher.publishEvent(new VisitEvent(url));
