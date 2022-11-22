@@ -54,8 +54,6 @@ Now, all is up and runing you can perform http request using any tool (Postman ,
 
 
 
-**Project Overview**
-
 | Endpoint   |  Request Body |  Action |
 | :------------: | :------------: | :------------: |
 |  POST:/re/create | target url : String  |  return shortlink for the given url |
