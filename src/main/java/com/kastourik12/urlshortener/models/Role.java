@@ -16,7 +16,7 @@ import java.util.Set;
 @NoArgsConstructor @Getter @Setter
 public class Role implements Serializable {
 
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Column(name = "name",unique = true,nullable = false)
     @Enumerated(EnumType.STRING)

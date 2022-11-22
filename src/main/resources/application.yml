@@ -6,11 +6,14 @@ spring:
     driverClassName: org.postgresql.Driver
 
 
+
   jpa:
     defer-datasource-initialization: true
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: create
     show-sql: true
+
+
 
 
 
