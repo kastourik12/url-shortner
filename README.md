@@ -23,8 +23,6 @@ $ docker-compose up
 
 ##### add roles to the database
 
-> this service still got no endpoint for adding roles ( it not necessary to add them tho, the system will save roles if its  not in the database )
-
 $ docker exec -it {postgres_container_name} bash
 > ( default : postgres_db )
 
