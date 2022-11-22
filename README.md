@@ -5,10 +5,11 @@
 - The app also records URLs that you have previously shortened, and it can display how frequently that website has been accessed using that particular link.
 
 # Setup
+```bash
 $ git clone git@github.com:kastourik12/url-shortner.git
 
 $ cd url-shortner
-
+```
 ## Docker:
 ------------
 ```bash
