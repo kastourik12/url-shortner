@@ -52,11 +52,6 @@ $  ./mvnw spring-boot:run
 
 Now, all is up and runing you can perform http request using any tool (Postman , curl ...)
 
-check : http://localhost:8082/swagger-ui.html
-
-for all request details .
-
-
 
 
 **Project Overview**
@@ -66,9 +61,9 @@ for all request details .
 |  POST:/re/create | target url : String  |  return shortlink for the given url |
 |  GET:/re/{shrtUrl} |     | Redirect to the original url   |
 |  POST:/auth./sign-up | username, password & roles | save user   |
-|  POST:/auth/sign-in |  username, password & roles |  authenticate user and return access token (JWT) as a string |
+|  POST:/auth/sign-in |  username, password |  authenticate user and return access token (JWT) as a string |
 | GET:/stats/all | target url : String  | return all shortned urls and their statiscs (Only admin access) |
 |  GET:/stats/visited |   |  return all visited shorterned url (user access) |
 | GET:/stats/{id}  |   | return all visites for a shortned url (admin acces)  |
 
-
+> check : http://localhost:8082/swagger-ui.html for all request details .
