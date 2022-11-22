@@ -20,7 +20,7 @@ $ docker build -t {image_name} .
 $ docker-compose up
 
 
-
+>if you don't want to use import.sql in the classpath src/main/resources 
 ##### add roles to the database
 
 $ docker exec -it {postgres_container_name} bash
