@@ -35,7 +35,9 @@ postgres=# \c {database_name}
 > (default: test_db)
 
 test_db=# INSERT INTO roles (id,name) VALUES (1,'ROLE_USER');
-test_db=#  INSERT INTO roles (id,name) VALUES (2,'ROLE_ADMIN');
+
+
+test_db=# INSERT INTO roles (id,name) VALUES (2,'ROLE_ADMIN');
 
 
 ------------
