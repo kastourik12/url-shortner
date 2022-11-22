@@ -11,32 +11,35 @@ $ cd url-shortner
 
 ## Docker:
 ------------
-
+```bash
 $ mvn clean package -DskipTests
 
 $ docker build -t {image_name} .
-> ( image name is used in the docker-compose file )
-
+```
+>( image name is used in the docker-compose file )
+```bash
 $ docker-compose up
+```
 
 
->if you don't want to use import.sql in the classpath src/main/resources 
+>if you don't want to use import.sql in the classpath src/main/resources you need to add roles manually 
 ##### add roles to the database
-
+```bash
 $ docker exec -it {postgres_container_name} bash
-> ( default : postgres_db )
-
+```
+    > ( default : postgres_db )
+```bash
 $ psql -U {postgres_username}
-> ( default : postgres)
-
+```
+    > ( default : postgres)
+```bash
 postgres=# \c {database_name}
-> (default: test_db)
-
+```
+    > (default: test_db)
+```bash
 test_db=# INSERT INTO roles (id,name) VALUES (1,'ROLE_USER');
-
-
 test_db=#  INSERT INTO roles (id,name) VALUES (2,'ROLE_ADMIN');
-
+```
 
 ------------
 ## without Docker:
@@ -45,8 +48,9 @@ test_db=#  INSERT INTO roles (id,name) VALUES (2,'ROLE_ADMIN');
 > Make sure you have access to local or any Postgres server
 > apache-maven-3.8.6 & java 17.0.4
 
-
+```bash
 $  ./mvnw spring-boot:run
+```
 
 ------------
 >for all request details check : http://localhost:8082/swagger-ui.html  .
