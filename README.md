@@ -1,6 +1,6 @@
 ### Features
 
-- This is a REST API for Url shortener service like tiny url.
+- This is a REST API for Url shortener service similar to tiny url..
 - This service includes user authentication as well as shortening
 - The app also records URLs that you have previously shortened, and it can display how frequently that website has been accessed using that particular link.
 
