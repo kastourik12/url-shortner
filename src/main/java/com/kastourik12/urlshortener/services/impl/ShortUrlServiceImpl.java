@@ -103,9 +103,7 @@ public class ShortUrlServiceImpl implements ShortUrlService {
                     .orElseThrow(
                         () -> new ResourceNotFoundException("there no url for this short")
                     );
-
         url.setVisitedTime( url.getVisitedTime() + 1 );
-
         updateUrlEntity(url); // async func for updating url entity
 
 

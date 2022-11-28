@@ -80,7 +80,6 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public User getCurrentUser() {
         try {
-
             String username = SecurityContextHolder.getContext().getAuthentication().getName();
             return userRepository.findByUsername(username).orElseThrow(UnAuthorizedException::new);
 
