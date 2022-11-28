@@ -12,4 +12,6 @@ import org.springframework.stereotype.Repository;
 public interface VisitRepository extends JpaRepository<Visit,Long> {
     List<Visit> findVisitByUser(User user);
     List<Visit> findVisitByLongUrl(LongUrl longUrl);
+
+    List<Visit> findVisitByUserAndLongUrl(User user, LongUrl longUrl);
 }

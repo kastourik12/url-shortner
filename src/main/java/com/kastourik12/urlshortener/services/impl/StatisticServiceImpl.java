@@ -44,5 +44,12 @@ public class StatisticServiceImpl implements StatisticService {
         return visitRepository.findVisitByLongUrl(url);
     }
 
+    @Override
+    public List<Visit> getUserUrlVisits(Long id) {
+        User user = authService.getCurrentUser();
+        LongUrl url = urlRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("url with the id:" + id + "doesn't exist"));
+        return visitRepository.findVisitByUserAndLongUrl(user,url);
+    }
+
 
 }

@@ -37,5 +37,11 @@ public class StatisticsController {
         return ResponseEntity.ok(statisticService.getUrlVisits(id));
     }
 
+    @GetMapping("visits/{id}") @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
+    public ResponseEntity<List<Visit>> getUserUrlVisits(@PathVariable Long id){
+        return ResponseEntity.ok(statisticService.getUserUrlVisits(id));
+    }
+
+
 
 }
