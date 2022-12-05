@@ -8,9 +8,9 @@ import javax.validation.constraints.NotBlank;
 
 @Data
 public class SignUpRequest {
-    @NotBlank
+    @NotBlank(message = "username should not be empty")
     private String username;
-    @NotBlank
+    @NotBlank(message = "password should not be empty")
     private String password;
     @Nullable
     private String[] roles;

@@ -27,7 +27,7 @@ public class StatisticsController {
         return  ResponseEntity.ok(statisticService.getAllUrls());
     }
 
-    @GetMapping("/visited")
+    @GetMapping("/visited") @PreAuthorize("hasAuthority('SCOPE_ROLE_USER')")
     public ResponseEntity<List<LongUrl>> getVisitedUrls(){
         return ResponseEntity.ok(statisticService.getVisitedUrls());
     }
@@ -37,7 +37,7 @@ public class StatisticsController {
         return ResponseEntity.ok(statisticService.getUrlVisits(id));
     }
 
-    @GetMapping("visits/{id}") @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
+    @GetMapping("visits/{id}") @PreAuthorize("hasAuthority('SCOPE_ROLE_USER')")
     public ResponseEntity<List<Visit>> getUserUrlVisits(@PathVariable Long id){
         return ResponseEntity.ok(statisticService.getUserUrlVisits(id));
     }

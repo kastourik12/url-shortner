@@ -8,7 +8,7 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor @NoArgsConstructor
 public class ShortUrlCreationRequest {
 
-    @NotBlank
+    @NotBlank(message = "url should be not empty")
     private String url;
 
 
