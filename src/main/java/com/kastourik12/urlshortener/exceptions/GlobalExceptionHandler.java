@@ -9,11 +9,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import javax.validation.ConstraintViolationException;
-import java.util.Arrays;
+
 
 @ControllerAdvice
 @Slf4j
@@ -24,9 +24,9 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(value = ConstraintViolationException.class)
-    public ResponseEntity<?> requestPayloadValidation(ConstraintViolationException exception){
-        return new ResponseEntity<>(exception.getConstraintViolations(),HttpStatus.BAD_REQUEST);
+    @ExceptionHandler(value = MethodArgumentNotValidException.class)
+    public ResponseEntity<?> requestPayloadValidation(MethodArgumentNotValidException exception){
+        return new ResponseEntity<>(exception.getFieldError().getDefaultMessage(),HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(value = InvalidUrlException.class)
@@ -35,23 +35,24 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(value = UnAuthorizedException.class)
-    public ResponseEntity<?> BadCredentials(){
-        return new ResponseEntity<>("Bad Credentials",HttpStatus.BAD_REQUEST);
+    public ResponseEntity<?> unauthorizedException(){
+        return new ResponseEntity<>("unauthorized",HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(value = UsernameExistsException.class)
     public ResponseEntity<?> UsernameExists(){
-        return new ResponseEntity<>("Username alreay exists",HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("Username already exists",HttpStatus.BAD_REQUEST);
     }
+
     @ExceptionHandler(value = AccessDeniedException.class)
     public ResponseEntity<?> accessDeniedException(){
         return new ResponseEntity<>("Not Authorized", HttpStatus.FORBIDDEN);
     }
-    @ExceptionHandler(value = Exception.class)
-    public ResponseEntity<?> globalExceptions(Exception exception){
-        log.error(exception.getClass().getName(),exception.getMessage());
-        return new ResponseEntity<>("Service unavailable try later ",HttpStatus.INTERNAL_SERVER_ERROR);
-    }
 
+   @ExceptionHandler(value = Exception.class)
+   public ResponseEntity<?> globalExceptions(Exception exception){
+      log.error(exception.getClass().getName(),exception.getMessage());
+       return new ResponseEntity<>("Service unavailable try later ",HttpStatus.INTERNAL_SERVER_ERROR);
+   }
 
 }

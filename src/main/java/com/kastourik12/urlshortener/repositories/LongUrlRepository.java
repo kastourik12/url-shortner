@@ -17,7 +17,6 @@ import java.util.Optional;
  */
 @Repository
 public interface LongUrlRepository extends JpaRepository<LongUrl, Long>{
-    
-    boolean existsByLongUrl(String longUrl);
+
     Optional<LongUrl> findByLongUrl(String longUrl);
 }
