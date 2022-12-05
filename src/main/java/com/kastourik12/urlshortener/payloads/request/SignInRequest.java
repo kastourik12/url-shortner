@@ -7,10 +7,10 @@ import javax.validation.constraints.NotBlank;
 @Data
 public class SignInRequest {
 
-    @NotBlank
+    @NotBlank(message = "username should not be empty")
     private String username;
 
-    @NotBlank
+    @NotBlank(message = "password should not be empty")
     private String password;
 
 }

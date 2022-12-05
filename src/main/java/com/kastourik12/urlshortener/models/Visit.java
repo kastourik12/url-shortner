@@ -1,11 +1,9 @@
 package com.kastourik12.urlshortener.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -17,7 +15,6 @@ public class Visit implements Serializable {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @CreatedDate
     private Date createdAt;
 
     @JsonIgnore
@@ -25,10 +22,10 @@ public class Visit implements Serializable {
     @JoinColumn(name = "fk_user")
     private User user;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "fk_long_url")
     private LongUrl longUrl;
-
 
 
 }

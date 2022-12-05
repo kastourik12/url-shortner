@@ -10,4 +10,6 @@ public interface StatisticService {
     List<LongUrl> getVisitedUrls();
 
     List<Visit> getUrlVisits(Long urlId);
+
+    List<Visit> getUserUrlVisits(Long urlId);
 }

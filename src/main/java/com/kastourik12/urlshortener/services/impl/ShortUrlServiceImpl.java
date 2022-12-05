@@ -54,17 +54,14 @@ public class ShortUrlServiceImpl implements ShortUrlService {
         if(isNotValidUrl(payload.getUrl()))
         {
             String[] u = payload.getUrl().split("\\.");
-
             if( u.length  > 1 && !u[0].isEmpty() && !u[1].isEmpty() )
-
                 payload.setUrl("https://" + payload.getUrl());
-
             if (isNotValidUrl(payload.getUrl()))
                 throw new InvalidUrlException();
         }
 
-        Optional<LongUrl> optionalUrl = urlRepository.findByLongUrl(payload.getUrl());
 
+        Optional<LongUrl> optionalUrl = urlRepository.findByLongUrl(payload.getUrl());
         LongUrl url ;
 
         if(optionalUrl.isPresent()){
@@ -103,9 +100,7 @@ public class ShortUrlServiceImpl implements ShortUrlService {
                     .orElseThrow(
                         () -> new ResourceNotFoundException("there no url for this short")
                     );
-
         url.setVisitedTime( url.getVisitedTime() + 1 );
-
         updateUrlEntity(url); // async func for updating url entity
 
 
