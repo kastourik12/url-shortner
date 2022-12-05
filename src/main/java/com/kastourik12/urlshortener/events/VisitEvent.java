@@ -4,7 +4,6 @@ import com.kastourik12.urlshortener.models.LongUrl;
 import lombok.Getter;
 import org.springframework.context.ApplicationEvent;
 
-import java.time.Clock;
 
 @Getter
 public class VisitEvent extends ApplicationEvent {

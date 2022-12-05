@@ -6,10 +6,7 @@
 package com.kastourik12.urlshortener.services;
 
 
-/**
- *
- * @author ok
- */
+
 public interface CoderService {
     String codeIdToShortUrl(Long id);
     Long decodeShortUrlToId(String shortUrl);
