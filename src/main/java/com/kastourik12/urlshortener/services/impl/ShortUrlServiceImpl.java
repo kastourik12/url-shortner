@@ -60,7 +60,6 @@ public class ShortUrlServiceImpl implements ShortUrlService {
                 throw new InvalidUrlException();
         }
 
-
         Optional<LongUrl> optionalUrl = urlRepository.findByLongUrl(payload.getUrl());
         LongUrl url ;
 
