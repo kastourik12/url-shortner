@@ -82,8 +82,7 @@ public class AuthServiceImpl implements AuthService {
         try {
             String username = SecurityContextHolder.getContext().getAuthentication().getName();
             return userRepository.findByUsername(username).orElseThrow(UnAuthorizedException::new);
-
-        }catch (Exception exception){
+        }catch (RuntimeException exception){
             throw new UnAuthorizedException();
         }
 

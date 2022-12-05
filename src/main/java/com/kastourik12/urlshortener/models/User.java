@@ -3,6 +3,7 @@ package com.kastourik12.urlshortener.models;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.jpa.domain.AbstractAuditable;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
@@ -13,7 +14,7 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 @NoArgsConstructor @Getter @Setter
-public class User implements Serializable {
+public class User extends Auditable  implements Serializable {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;

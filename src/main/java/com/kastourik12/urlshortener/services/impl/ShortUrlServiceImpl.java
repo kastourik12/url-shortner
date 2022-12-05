@@ -26,7 +26,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.net.URL;
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -113,11 +112,6 @@ public class ShortUrlServiceImpl implements ShortUrlService {
         RedirectView redirectView = new RedirectView();
         redirectView.setUrl(url.getLongUrl());
         return  redirectView;
-    }
-
-    @Override
-    public List<LongUrl> getAllUrls() {
-        return urlRepository.findAll();
     }
 
     @Async

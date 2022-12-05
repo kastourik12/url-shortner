@@ -12,7 +12,7 @@ import java.util.Date;
 @Entity
 @AllArgsConstructor @NoArgsConstructor
 @Getter @Setter @Builder
-public class LongUrl implements Serializable {
+public class LongUrl extends Auditable implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
