@@ -1,5 +1,6 @@
 package com.kastourik12.urlshortener.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -24,7 +25,7 @@ public abstract class Auditable {
     @ManyToOne
     @JoinColumn(name = "created_by_id")
     @CreatedBy
-    @Nullable
+    @Nullable @JsonIgnore
     private User createdBy;
 
      public Date getCreatedAt() {

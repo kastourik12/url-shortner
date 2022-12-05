@@ -9,22 +9,14 @@ import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
 
 @Entity @Getter @Setter @NoArgsConstructor
-public class Visit implements Serializable {
+public class Visit extends Auditable implements Serializable {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @CreatedDate
-    private Date createdAt;
-
     @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "fk_user")
-    private User user;
-
     @ManyToOne
     @JoinColumn(name = "fk_long_url")
     private LongUrl longUrl;

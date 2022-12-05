@@ -34,7 +34,6 @@ import java.util.Optional;
  */
 
 @Service
-@Transactional
 @Slf4j
 @RequiredArgsConstructor
 public class ShortUrlServiceImpl implements ShortUrlService {
@@ -71,7 +70,6 @@ public class ShortUrlServiceImpl implements ShortUrlService {
                 url = optionalUrl.get();
                 url.setShortenedTimes(url.getShortenedTimes() + 1);
                 updateUrlEntity(url);
-
             }
         else {
 
@@ -79,8 +77,8 @@ public class ShortUrlServiceImpl implements ShortUrlService {
                 url.setVisitedTime(0L);
                 url.setShortenedTimes(1);
                 url.setLongUrl(payload.getUrl());
-                url.setCreatedAt(new Date());
                 url = urlRepository.save(url);
+
             }
 
         return ShortUrlCreationResponse
@@ -89,9 +87,6 @@ public class ShortUrlServiceImpl implements ShortUrlService {
                     .shortenedTimes(url.getShortenedTimes())
                     .visitedTimes(url.getVisitedTime())
                     .build();
-
-
-
     }
 
 
@@ -102,12 +97,8 @@ public class ShortUrlServiceImpl implements ShortUrlService {
                     .orElseThrow(
                         () -> new ResourceNotFoundException("there no url for this short")
                     );
-        url.setVisitedTime( url.getVisitedTime() + 1 );
-        updateUrlEntity(url); // async func for updating url entity
-
-
-        if(tokenService.isRequestContainsValidToken(request))
-            eventPublisher.publishEvent(new VisitEvent(url));
+         // async func for updating url entity
+        eventPublisher.publishEvent(new VisitEvent(url));
 
         RedirectView redirectView = new RedirectView();
         redirectView.setUrl(url.getLongUrl());

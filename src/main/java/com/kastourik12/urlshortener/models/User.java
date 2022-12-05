@@ -14,9 +14,9 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 @NoArgsConstructor @Getter @Setter
-public class User extends Auditable  implements Serializable {
+public class User extends Auditable implements Serializable {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
     @Column(unique = true)

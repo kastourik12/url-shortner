@@ -15,7 +15,7 @@ import java.util.Date;
 public class LongUrl extends Auditable implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotBlank(message = "url should not be empty")

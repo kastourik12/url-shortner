@@ -7,7 +7,6 @@ import com.kastourik12.urlshortener.repositories.VisitRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -21,19 +20,11 @@ public class VisitEventListener {
     @Async
     public void handleVisitEvent(VisitEvent event){
         Visit visit = new Visit();
-        try{
-            String username = SecurityContextHolder.getContext().getAuthentication().getName();
-            User user = userRepository.findByUsername(username).get();
-            visit.setUser(user);
-        }catch (Exception e){
-            visit.setUser(null);
-        }
-        finally {
             visit.setLongUrl(event.getLongUrl());
-            visit.setCreatedAt(new Date());
             visitRepository.save(visit);
         }
 
-    }
 
 }
+
+

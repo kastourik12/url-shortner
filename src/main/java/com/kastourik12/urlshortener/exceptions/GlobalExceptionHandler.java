@@ -49,7 +49,7 @@ public class GlobalExceptionHandler {
     }
     @ExceptionHandler(value = Exception.class)
     public ResponseEntity<?> globalExceptions(Exception exception){
-        log.error(exception.getClass().getName(),exception.getMessage());
+        exception.printStackTrace();
         return new ResponseEntity<>("Service unavailable try later ",HttpStatus.INTERNAL_SERVER_ERROR);
     }
 

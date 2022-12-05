@@ -34,7 +34,7 @@ public class StatisticServiceImpl implements StatisticService {
     @Override
     public List<LongUrl> getVisitedUrls() {
         User user = authService.getCurrentUser();
-        return visitRepository.findVisitByUser(user).stream()
+        return visitRepository.findVisitByCreatedBy(user).stream()
                 .map(Visit::getLongUrl).toList();
     }
 
@@ -48,7 +48,7 @@ public class StatisticServiceImpl implements StatisticService {
     public List<Visit> getUserUrlVisits(Long id) {
         User user = authService.getCurrentUser();
         LongUrl url = urlRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("url with the id:" + id + "doesn't exist"));
-        return visitRepository.findVisitByUserAndLongUrl(user,url);
+        return visitRepository.findVisitByCreatedByAndLongUrl(user,url);
     }
 
 
