@@ -21,8 +21,6 @@ import java.util.List;
 public class StatisticServiceImpl implements StatisticService {
     private final LongUrlRepository urlRepository;
     private final VisitRepository visitRepository;
-
-
     private final AuthService authService;
 
     @Override
