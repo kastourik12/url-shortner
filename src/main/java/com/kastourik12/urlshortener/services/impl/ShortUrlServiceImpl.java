@@ -42,7 +42,6 @@ public class ShortUrlServiceImpl implements ShortUrlService {
     
     private final LongUrlRepository urlRepository;
     private final CoderService coderService;
-
     private final TokenService tokenService;
     private final ApplicationEventPublisher eventPublisher;
     
@@ -65,11 +64,9 @@ public class ShortUrlServiceImpl implements ShortUrlService {
         LongUrl url ;
 
         if(optionalUrl.isPresent()){
-
                 url = optionalUrl.get();
                 url.setShortenedTimes(url.getShortenedTimes() + 1);
                 updateUrlEntity(url);
-
             }
         else {
 
@@ -88,13 +85,12 @@ public class ShortUrlServiceImpl implements ShortUrlService {
                     .visitedTimes(url.getVisitedTime())
                     .build();
 
-
-
     }
 
 
     @Override
     public RedirectView redirectToOriginalUrl(String shortUrl, HttpServletRequest request) {
+
         Long id = coderService.decodeShortUrlToId(shortUrl);
         LongUrl url = urlRepository.findById(id)
                     .orElseThrow(
@@ -103,13 +99,13 @@ public class ShortUrlServiceImpl implements ShortUrlService {
         url.setVisitedTime( url.getVisitedTime() + 1 );
         updateUrlEntity(url); // async func for updating url entity
 
-
         if(tokenService.isRequestContainsValidToken(request))
             eventPublisher.publishEvent(new VisitEvent(url));
 
         RedirectView redirectView = new RedirectView();
         redirectView.setUrl(url.getLongUrl());
         return  redirectView;
+
     }
 
     @Override
