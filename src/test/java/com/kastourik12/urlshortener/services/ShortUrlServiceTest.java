@@ -1,6 +1,6 @@
 package com.kastourik12.urlshortener.services;
 
-import com.kastourik12.urlshortener.exceptions.InvalidUrlException;
+import com.kastourik12.urlshortener.exceptions.CustomException;
 import com.kastourik12.urlshortener.models.LongUrl;
 import com.kastourik12.urlshortener.payloads.request.ShortUrlCreationRequest;
 import com.kastourik12.urlshortener.repositories.LongUrlRepository;
@@ -31,7 +31,7 @@ public class ShortUrlServiceTest {
 
         //given
 
-        String invalidUrl = "exmaple";
+        String invalidUrl = "invalid_url";
 
         //where
 
@@ -39,7 +39,7 @@ public class ShortUrlServiceTest {
 
         //then
 
-        assertThrows(InvalidUrlException.class,() -> {
+        assertThrows(CustomException.class,() -> {
             underTest.convertToShortUrl(request);
         });
 

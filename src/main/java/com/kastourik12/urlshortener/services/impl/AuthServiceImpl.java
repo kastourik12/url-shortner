@@ -1,6 +1,6 @@
 package com.kastourik12.urlshortener.services.impl;
 
-import com.kastourik12.urlshortener.exceptions.UnAuthorizedException;
+import com.kastourik12.urlshortener.exceptions.CustomException;
 import com.kastourik12.urlshortener.models.User;
 import com.kastourik12.urlshortener.payloads.request.SignInRequest;
 import com.kastourik12.urlshortener.payloads.request.SignUpRequest;
@@ -8,6 +8,7 @@ import com.kastourik12.urlshortener.services.AuthService;
 import com.kastourik12.urlshortener.services.TokenService;
 import com.kastourik12.urlshortener.services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -38,7 +39,7 @@ public class AuthServiceImpl implements AuthService {
         return tokenService.generateToken(authentication);
         }
         catch (RuntimeException e){
-            throw new UnAuthorizedException();
+            throw new CustomException("Bad credentials", HttpStatus.BAD_REQUEST);
         }
 
     }
@@ -51,7 +52,7 @@ public class AuthServiceImpl implements AuthService {
             return userService.getUserByUsername(username);
 
         }catch (RuntimeException exception){
-            throw new UnAuthorizedException();
+            throw new CustomException("Authentication error,try to reconnect",HttpStatus.UNAUTHORIZED);
         }
 
     }

@@ -1,6 +1,6 @@
 package com.kastourik12.urlshortener.services.impl;
 
-import com.kastourik12.urlshortener.exceptions.ResourceNotFoundException;
+import com.kastourik12.urlshortener.exceptions.CustomException;
 import com.kastourik12.urlshortener.models.LongUrl;
 
 import com.kastourik12.urlshortener.models.Visit;
@@ -12,6 +12,7 @@ import com.kastourik12.urlshortener.services.AuthService;
 
 import com.kastourik12.urlshortener.services.StatisticService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -38,14 +39,14 @@ public class StatisticServiceImpl implements StatisticService {
 
     @Override
     public List<Visit> getUrlVisits(Long urlId) {
-        LongUrl url = urlRepository.findById(urlId).orElseThrow(() -> new ResourceNotFoundException("there is no url with this  id :" + urlId));
+        LongUrl url = urlRepository.findById(urlId).orElseThrow(() -> new CustomException("there is no url with this  id :" + urlId, HttpStatus.NOT_FOUND));
         return visitRepository.findVisitByLongUrl(url);
     }
 
     @Override
-    public List<Visit> getUserUrlVisits(Long id) {
+    public List<Visit> getUserUrlVisits(Long urlId) {
         User user = authService.getCurrentUser();
-        LongUrl url = urlRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("url with the id:" + id + "doesn't exist"));
+        LongUrl url = urlRepository.findById(urlId).orElseThrow(() -> new CustomException("there is no url with this  id :" + urlId, HttpStatus.NOT_FOUND));
         return visitRepository.findVisitByUserAndLongUrl(user,url);
     }
 

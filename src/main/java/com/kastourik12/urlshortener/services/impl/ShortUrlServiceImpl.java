@@ -6,8 +6,7 @@
 package com.kastourik12.urlshortener.services.impl;
 
 import com.kastourik12.urlshortener.events.VisitEvent;
-import com.kastourik12.urlshortener.exceptions.InvalidUrlException;
-import com.kastourik12.urlshortener.exceptions.ResourceNotFoundException;
+import com.kastourik12.urlshortener.exceptions.CustomException;
 import com.kastourik12.urlshortener.models.LongUrl;
 import com.kastourik12.urlshortener.payloads.request.ShortUrlCreationRequest;
 import com.kastourik12.urlshortener.payloads.response.ShortUrlCreationResponse;
@@ -18,6 +17,7 @@ import com.kastourik12.urlshortener.services.TokenService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.view.RedirectView;
@@ -55,7 +55,7 @@ public class ShortUrlServiceImpl implements ShortUrlService {
             if( u.length  > 1 && !u[0].isEmpty() && !u[1].isEmpty() )
                 payload.setUrl("https://" + payload.getUrl());
             if (isNotValidUrl(payload.getUrl()))
-                throw new InvalidUrlException();
+                throw new CustomException("Url should be valid", HttpStatus.BAD_REQUEST);
         }
 
 
@@ -93,7 +93,7 @@ public class ShortUrlServiceImpl implements ShortUrlService {
         Long id = coderService.decodeShortUrlToId(shortUrl);
         LongUrl url = urlRepository.findById(id)
                     .orElseThrow(
-                        () -> new ResourceNotFoundException("there no url for this short")
+                        () -> new CustomException("there no url for this short",HttpStatus.NOT_FOUND)
                     );
         url.setVisitedTime( url.getVisitedTime() + 1 );
         updateUrlEntity(url); // async func for updating url entity

@@ -1,7 +1,6 @@
 package com.kastourik12.urlshortener.services.impl;
 
-import com.kastourik12.urlshortener.exceptions.ResourceNotFoundException;
-import com.kastourik12.urlshortener.exceptions.UsernameExistsException;
+import com.kastourik12.urlshortener.exceptions.CustomException;
 import com.kastourik12.urlshortener.models.ERole;
 import com.kastourik12.urlshortener.models.Role;
 import com.kastourik12.urlshortener.models.User;
@@ -10,6 +9,7 @@ import com.kastourik12.urlshortener.repositories.RoleRepository;
 import com.kastourik12.urlshortener.repositories.UserRepository;
 import com.kastourik12.urlshortener.services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -24,15 +24,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void saveUser(SignUpRequest request) {
-        if(userRepository.findByUsername(request.getUsername()).isPresent())
-            throw new UsernameExistsException();
 
+        if(userRepository.findByUsername(request.getUsername()).isPresent())
+            throw new CustomException("username already exists", HttpStatus.BAD_REQUEST);
         User user = new User();
         user.setUsername(request.getUsername());
         user.setPassword(encoder.encode(request.getPassword()));
         if(request.getRoles() == null) {
             Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                    .orElseThrow(() -> new ResourceNotFoundException("Role not found in the database"));
+                    .orElseThrow(() -> new CustomException("Role not found in the database",HttpStatus.NOT_FOUND));
             Set<Role> roles = new HashSet<>();
             roles.add(userRole);
             user.setRoles(roles);
@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserByUsername(String username) {
-        return userRepository.findByUsername(username).orElseThrow(() -> new ResourceNotFoundException(""));
+        return userRepository.findByUsername(username).orElseThrow(() -> new CustomException("user with username:" + username ,HttpStatus.NOT_FOUND));
     }
 
     private Set<Role> getRoles(String [] roles){
@@ -52,8 +52,7 @@ public class UserServiceImpl implements UserService {
         Set<Role> userRoles = new HashSet<>();
         for(String role : roles) {
             userRoles.add(roleRepository.findByName(Enum.valueOf(ERole.class,role))
-                    .orElseThrow(() -> new ResourceNotFoundException("Role not found in the database"))
-            );
+                    .orElseThrow(() -> new CustomException("Role not found in the database",HttpStatus.NOT_FOUND)));
         }
         return userRoles;
     }

@@ -12,7 +12,6 @@ import com.kastourik12.urlshortener.payloads.response.ShortUrlCreationResponse;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 /**
  *
