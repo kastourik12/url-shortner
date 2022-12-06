@@ -25,5 +25,4 @@ public interface ShortUrlService {
 
     RedirectView redirectToOriginalUrl(String shortUrl, HttpServletRequest request);
 
-    List<LongUrl> getAllUrls();
 }

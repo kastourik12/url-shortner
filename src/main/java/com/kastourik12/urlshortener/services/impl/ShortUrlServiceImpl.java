@@ -108,11 +108,6 @@ public class ShortUrlServiceImpl implements ShortUrlService {
 
     }
 
-    @Override
-    public List<LongUrl> getAllUrls() {
-        return urlRepository.findAll();
-    }
-
     @Async
     void updateUrlEntity(LongUrl url){
         urlRepository.save(url);
