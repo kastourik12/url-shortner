@@ -39,7 +39,7 @@ public class ShortUrlController {
     }
 
     @GetMapping("/{shortUrl}")
-    public RedirectView getAndRedirect(@PathVariable String shortUrl,HttpServletRequest request){
+    public RedirectView getAndRedirect(@PathVariable String shortUrl, HttpServletRequest request){
         return urlService.redirectToOriginalUrl(shortUrl,request);
     }
 }

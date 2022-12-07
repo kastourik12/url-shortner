@@ -41,7 +41,6 @@ public class ShortUrlServiceImpl implements ShortUrlService {
     private final LongUrlRepository urlRepository;
     private final CoderService coderService;
 
-    private final TokenService tokenService;
     private final ApplicationEventPublisher eventPublisher;
     
     
@@ -66,16 +65,14 @@ public class ShortUrlServiceImpl implements ShortUrlService {
         LongUrl url ;
 
         if(optionalUrl.isPresent()){
-
                 url = optionalUrl.get();
                 url.setShortenedTimes(url.getShortenedTimes() + 1);
-                updateUrlEntity(url);
+                urlRepository.save(url);
+
             }
         else {
 
                 url = new LongUrl();
-                url.setVisitedTime(0L);
-                url.setShortenedTimes(1);
                 url.setLongUrl(payload.getUrl());
                 url = urlRepository.save(url);
 
@@ -85,30 +82,24 @@ public class ShortUrlServiceImpl implements ShortUrlService {
                     .builder()
                     .url("http://localhost:8082/re/" + coderService.codeIdToShortUrl(url.getId()))
                     .shortenedTimes(url.getShortenedTimes())
-                    .visitedTimes(url.getVisitedTime())
                     .build();
     }
 
 
-    @Override
+    @Override @Transactional()
     public RedirectView redirectToOriginalUrl(String shortUrl, HttpServletRequest request) {
         Long id = coderService.decodeShortUrlToId(shortUrl);
         LongUrl url = urlRepository.findById(id)
                     .orElseThrow(
                         () -> new ResourceNotFoundException("there no url for this short")
                     );
-         // async func for updating url entity
         eventPublisher.publishEvent(new VisitEvent(url));
-
         RedirectView redirectView = new RedirectView();
         redirectView.setUrl(url.getLongUrl());
         return  redirectView;
     }
 
-    @Async
-    void updateUrlEntity(LongUrl url){
-        urlRepository.save(url);
-    }
+
 
 
 

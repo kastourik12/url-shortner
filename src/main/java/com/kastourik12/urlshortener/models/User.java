@@ -1,5 +1,6 @@
 package com.kastourik12.urlshortener.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,15 +17,17 @@ import java.util.Set;
 @NoArgsConstructor @Getter @Setter
 public class User extends Auditable implements Serializable {
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
+
 
     @Column(unique = true)
     private String username;
 
+    @JsonIgnore
     private String password;
 
-
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     @JoinTable(
             name = "user_roles",

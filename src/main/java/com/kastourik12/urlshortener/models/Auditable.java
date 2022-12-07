@@ -2,6 +2,8 @@ package com.kastourik12.urlshortener.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -17,6 +19,7 @@ import java.util.Date;
 
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
+@Getter @Setter
 public abstract class Auditable {
     @CreatedDate
     private Date createdAt;
@@ -28,28 +31,5 @@ public abstract class Auditable {
     @Nullable @JsonIgnore
     private User createdBy;
 
-     public Date getCreatedAt() {
-         return createdAt;
-     }
 
-     public void setCreatedAt(Date createdAt) {
-         this.createdAt = createdAt;
-     }
-
-     public Date getLastModifiedAt() {
-         return lastModifiedAt;
-     }
-
-     public void setLastModifiedAt(Date lastModifiedAt) {
-         this.lastModifiedAt = lastModifiedAt;
-     }
-
-     @Nullable
-     public User getCreatedBy() {
-         return createdBy;
-     }
-
-     public void setCreatedBy(@Nullable User createdBy) {
-         this.createdBy = createdBy;
-     }
  }
