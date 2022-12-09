@@ -2,7 +2,10 @@ package com.kastourik12.urlshortener.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kastourik12.urlshortener.payloads.request.ShortUrlCreationRequest;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,7 +13,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.containsString;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -18,13 +20,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class ShortUrlControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
-    @Test
+    @Test @Order(3)
     void shouldConvertToShortUrl() throws Exception {
 
 
@@ -37,10 +39,10 @@ class ShortUrlControllerTest {
                     .content(objectToJson(requestBody)))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString("shortUrl")));
+                .andExpect(content().string(containsString("visitedTimes")));
     }
 
-    @Test
+    @Test @Order(2)
     public void shouldNotConvertInvalidUrl() throws Exception {
 
 
@@ -57,9 +59,21 @@ class ShortUrlControllerTest {
     }
 
 
+    @Test @Order(1)
+    void shouldResponse404ForNoSavedUrl() throws Exception{
+        mockMvc.perform(
+                get("/re/b"))
+                .andDo(print())
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(containsString("no url found for this short")));
+    }
 
-    @Test
-    void getAndRedirect() {
+    @Test @Order(4)
+    public void shouldReturnRedirectUrl() throws Exception {
+        mockMvc.perform(
+                    get("/re/b"))
+                .andDo(print())
+                .andExpect(status().is3xxRedirection());
     }
 
     private String objectToJson(Object obj){
