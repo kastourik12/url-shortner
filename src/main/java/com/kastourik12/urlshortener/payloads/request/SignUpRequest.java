@@ -1,5 +1,6 @@
 package com.kastourik12.urlshortener.payloads.request;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.lang.Nullable;
 
@@ -14,4 +15,9 @@ public class SignUpRequest {
     private String password;
     @Nullable
     private String[] roles;
+
+    public SignUpRequest(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
 }

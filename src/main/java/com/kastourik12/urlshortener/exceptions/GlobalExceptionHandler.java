@@ -31,6 +31,7 @@ public class GlobalExceptionHandler {
 
    @ExceptionHandler(value = CustomException.class)
     public ResponseEntity<?> customExceptionHandling(CustomException exception){
+        exception.printStackTrace();
         return new ResponseEntity<>(exception.getMessage(),exception.getHttpStatus());
    }
 

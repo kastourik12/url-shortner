@@ -1,6 +1,5 @@
 package com.kastourik12.urlshortener.controllers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kastourik12.urlshortener.payloads.request.ShortUrlCreationRequest;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -12,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static com.kastourik12.urlshortener.utils.ObjectToJson.objectToJson;
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -76,11 +76,18 @@ class ShortUrlControllerTest {
                 .andExpect(status().is3xxRedirection());
     }
 
-    private String objectToJson(Object obj){
-        try {
-            return new ObjectMapper().writeValueAsString(obj);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+
+    @Test @Order(5)
+    public void shouldReturn400ForEmptyBody() throws Exception{
+        ShortUrlCreationRequest request = new ShortUrlCreationRequest();
+        mockMvc.perform(
+                    post("/re/create")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectToJson(request)))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(containsString("url should not be empty")));
     }
+
+
 }
