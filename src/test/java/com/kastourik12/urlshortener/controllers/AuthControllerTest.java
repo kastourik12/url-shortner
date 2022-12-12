@@ -1,5 +1,6 @@
 package com.kastourik12.urlshortener.controllers;
 
+import com.kastourik12.urlshortener.payloads.request.SignInRequest;
 import com.kastourik12.urlshortener.payloads.request.SignUpRequest;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -55,4 +56,52 @@ public class AuthControllerTest {
                 .andExpect(content().string(containsString("username already exists")));
 
     }
+
+    @Test
+    public void shouldReturnValidationErrorForEmptyUsername() throws Exception{
+        SignUpRequest request = new SignUpRequest("","test");
+        mockMvc.perform(
+                    post("/auth/sign-up")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectToJson(request)))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(containsString("username should not be empty")));
+    }
+
+    @Test
+    public void shouldReturnValidationErrorForEmptyPassword() throws Exception{
+        SignUpRequest request = new SignUpRequest("test","");
+        mockMvc.perform(
+                        post("/auth/sign-up")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectToJson(request)))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(containsString("password should not be empty")));
+    }
+    @Test @Order(1)
+    public void shouldReturnBadCredentialsForWrongUsernameOrPassword() throws Exception {
+        SignInRequest request = new SignInRequest("test","test");
+        mockMvc.perform(
+                        post("/auth/sign-in")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectToJson(request)))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(containsString("Bad credentials")));
+    }
+
+    @Test @Order(4)
+    public void shouldSignInForSavedUser() throws Exception{
+        SignInRequest request = new SignInRequest("admin","admin");
+        mockMvc.perform(
+                        post("/auth/sign-in")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectToJson(request)))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+    }
+
 }
