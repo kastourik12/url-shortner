@@ -2,19 +2,17 @@ package com.kastourik12.urlshortener.controllers;
 
 import com.kastourik12.urlshortener.payloads.request.SignInRequest;
 import com.kastourik12.urlshortener.payloads.request.SignUpRequest;
+import com.kastourik12.urlshortener.payloads.response.SignInResponse;
 import com.kastourik12.urlshortener.services.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/auth")
+@RequestMapping("/auth") @CrossOrigin("*")
 public class AuthController {
     private final AuthService authService;
 
@@ -27,11 +25,8 @@ public class AuthController {
     }
 
     @PostMapping("/sign-in")
-    public ResponseEntity<String> signIn(@RequestBody @Valid SignInRequest request) {
-
-        String token = authService.authenticateAndGetJwt(request);
-
-        return ResponseEntity.ok(token);
+    public ResponseEntity<SignInResponse> signIn(@RequestBody @Valid SignInRequest request) {
+        return ResponseEntity.ok(authService.authenticateAndGetJwt(request));
     }
 
 }

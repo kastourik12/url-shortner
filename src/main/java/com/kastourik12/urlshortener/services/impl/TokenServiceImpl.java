@@ -1,5 +1,6 @@
 package com.kastourik12.urlshortener.services.impl;
 
+import com.kastourik12.urlshortener.payloads.response.TokenCreationPayload;
 import com.kastourik12.urlshortener.services.TokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -25,19 +26,21 @@ public class TokenServiceImpl implements TokenService {
 
 
     @Override
-    public String generateToken(Authentication authentication){
+    public TokenCreationPayload generateToken(Authentication authentication){
         Instant now =Instant.now();
+        Instant expiringTime = now.plus(1, ChronoUnit.HOURS);
         String scope = authentication.getAuthorities().stream()
                                     .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(" "));
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuer("self")
                 .issuedAt(now)
-                .expiresAt(now.plus(1, ChronoUnit.HOURS))
+                .expiresAt(expiringTime)
                 .subject(authentication.getName())
                 .claim("scope",scope)
                 .build();
-        return this.jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
+        String token =  this.jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
+        return new TokenCreationPayload(token,expiringTime);
     }
 
     @Override

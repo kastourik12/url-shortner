@@ -15,12 +15,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class StatisticsControllerTest {
-
-
     @Autowired
     private MockMvc mockMvc;
 
@@ -31,6 +29,7 @@ class StatisticsControllerTest {
                 .andDo(print())
                 .andExpect(status().isUnauthorized());
     }
+
 
     @Test
     void shouldReturnForbiddenWithUserAuthForGetAll() throws Exception {
@@ -85,7 +84,6 @@ class StatisticsControllerTest {
                                 )))
                 .andDo(print())
                 .andExpect(status().isForbidden());
-
     }
 
 }

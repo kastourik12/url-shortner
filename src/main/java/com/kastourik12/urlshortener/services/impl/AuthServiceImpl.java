@@ -4,6 +4,8 @@ import com.kastourik12.urlshortener.exceptions.CustomException;
 import com.kastourik12.urlshortener.models.User;
 import com.kastourik12.urlshortener.payloads.request.SignInRequest;
 import com.kastourik12.urlshortener.payloads.request.SignUpRequest;
+import com.kastourik12.urlshortener.payloads.response.SignInResponse;
+import com.kastourik12.urlshortener.payloads.response.TokenCreationPayload;
 import com.kastourik12.urlshortener.services.AuthService;
 import com.kastourik12.urlshortener.services.TokenService;
 import com.kastourik12.urlshortener.services.UserService;
@@ -31,12 +33,13 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public String authenticateAndGetJwt(SignInRequest request) {
+    public SignInResponse authenticateAndGetJwt(SignInRequest request) {
 
         try{
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getUsername(),request.getPassword()));
-        return tokenService.generateToken(authentication);
+        TokenCreationPayload tokenCreation= tokenService.generateToken(authentication);
+        return new SignInResponse(tokenCreation.token(),request.getUsername(),tokenCreation.expiresAt());
         }
         catch (RuntimeException e){
             throw new CustomException("Bad credentials", HttpStatus.BAD_REQUEST);
