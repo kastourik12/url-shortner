@@ -62,7 +62,7 @@ class ShortUrlControllerTest {
     @Test @Order(1)
     void shouldResponse404ForNoSavedUrl() throws Exception{
         mockMvc.perform(
-                get("/re/b"))
+                get("/re/bb"))
                 .andDo(print())
                 .andExpect(status().isNotFound())
                 .andExpect(content().string(containsString("no url found for this short")));

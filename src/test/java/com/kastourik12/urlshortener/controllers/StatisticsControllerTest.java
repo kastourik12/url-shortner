@@ -68,4 +68,24 @@ class StatisticsControllerTest {
 
     }
 
+    @Test
+    void shouldReturnUnauthorizedForUrlVisitsWithNoAuth() throws Exception{
+        mockMvc.perform(get("/stats/1"))
+                .andDo(print())
+                .andExpect(status().isUnauthorized());
+
+    }
+
+    @Test
+    void shouldReturnForbiddenForUrlVisitsWithNoAuth() throws Exception{
+        mockMvc.perform(
+                        get("/stats/1")
+                                .with(jwt().authorities(
+                                        new SimpleGrantedAuthority("SCOPE_ROLE_USER")
+                                )))
+                .andDo(print())
+                .andExpect(status().isForbidden());
+
+    }
+
 }

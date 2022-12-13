@@ -24,9 +24,9 @@ class UserRepositoryUnitTest {
     }
 
     @Test
-    public void shouldExistsByUsername() throws Exception{
+    public void shouldExistsByUsername() {
         //given
-        String cred = "test";
+        String cred = "admin";
 
         User user = new User();
         user.setUsername(cred);

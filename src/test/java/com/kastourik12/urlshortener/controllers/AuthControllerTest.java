@@ -32,7 +32,7 @@ public class AuthControllerTest {
     @Test @Order(2)
     public void shouldSignUp() throws Exception{
 
-        SignUpRequest request = new SignUpRequest("admin","admin");
+        SignUpRequest request = new SignUpRequest("user","user");
 
         mockMvc.perform(
                     post("/auth/sign-up")

@@ -4,7 +4,9 @@ import com.kastourik12.urlshortener.models.LongUrl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 
 import java.util.Optional;
@@ -22,11 +24,8 @@ public class UrlRepositoryUnitTest {
 
         //given
 
-        final String url = "www.example.com";
-        LongUrl urlEntity = new LongUrl();
-        urlEntity.setLongUrl("www.example.com");
+        final String url = "www.google.com";
         //when
-        underTest.save(urlEntity);
         Optional<LongUrl> expected = underTest.findByLongUrl(url);
         //then
         assertThat(expected)

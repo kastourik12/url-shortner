@@ -46,7 +46,7 @@ public class ShortUrlServiceTest {
     }
 
     @Test
-    public void shouldReturnShortUrl() throws Exception{
+    public void shouldConvertToShortUrl(){
 
         //given
         String url = "www.example.com";
@@ -66,9 +66,5 @@ public class ShortUrlServiceTest {
         verify(coderService).codeIdToShortUrl(id);
 
     }
-
-
-
-
 
 }
