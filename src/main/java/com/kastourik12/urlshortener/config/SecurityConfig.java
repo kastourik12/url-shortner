@@ -59,17 +59,13 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeRequests( auth ->
                         auth
-                                .antMatchers("/re/*","/auth/*").permitAll()
-
-                        )
+                                .antMatchers("/re/*","/auth/*").permitAll())
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
                 .sessionManagement( session  -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling(  ex  ->
                         ex.authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
-                        .accessDeniedHandler(new BearerTokenAccessDeniedHandler())
-                )
+                        .accessDeniedHandler(new BearerTokenAccessDeniedHandler()))
                 .build();
-
     }
     @Bean
     JwtDecoder jwtDecoder(){

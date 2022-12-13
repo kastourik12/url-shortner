@@ -20,6 +20,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class StatisticsControllerTest {
 
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -32,7 +33,7 @@ class StatisticsControllerTest {
     }
 
     @Test
-    void shouldReturnUnauthorizedWithUserAuthForGetAll() throws Exception {
+    void shouldReturnForbiddenWithUserAuthForGetAll() throws Exception {
         mockMvc.perform(
                         get("/stats/all")
                                 .with(jwt().authorities(
@@ -53,11 +54,18 @@ class StatisticsControllerTest {
                 .andExpect(status().isOk());
     }
 
-    @Test
-    void getUrlVisits() {
-    }
+
 
     @Test
-    void getUserUrlVisits() {
+    void shouldReturn200ForUrlVisitsWithAuthAdmin() throws Exception{
+        mockMvc.perform(
+                        get("/stats/1")
+                                .with(jwt().authorities(
+                                        new SimpleGrantedAuthority("SCOPE_ROLE_ADMIN")
+                                )))
+                .andDo(print())
+                .andExpect(status().isOk());
+
     }
+
 }
