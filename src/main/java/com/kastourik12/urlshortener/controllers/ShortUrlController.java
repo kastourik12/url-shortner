@@ -23,7 +23,7 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/re")
 @RequiredArgsConstructor
-@Slf4j @CrossOrigin("*")
+@Slf4j
 public class ShortUrlController {
 
     

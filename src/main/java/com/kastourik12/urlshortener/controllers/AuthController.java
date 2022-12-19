@@ -12,7 +12,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/auth") @CrossOrigin("*")
+@RequestMapping("/auth")
 public class AuthController {
     private final AuthService authService;
 

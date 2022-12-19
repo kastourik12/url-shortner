@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/stats")
 @RequiredArgsConstructor
-@CrossOrigin("*")
 public class StatisticsController {
     private final StatisticService statisticService;
 
