@@ -9,6 +9,7 @@ import com.kastourik12.urlshortener.events.VisitEvent;
 import com.kastourik12.urlshortener.exceptions.CustomException;
 import com.kastourik12.urlshortener.models.LongUrl;
 import com.kastourik12.urlshortener.payloads.request.ShortUrlCreationRequest;
+import com.kastourik12.urlshortener.payloads.response.RedirectionResponse;
 import com.kastourik12.urlshortener.payloads.response.ShortUrlCreationResponse;
 import com.kastourik12.urlshortener.repositories.LongUrlRepository;
 import com.kastourik12.urlshortener.services.CoderService;
@@ -20,7 +21,6 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
@@ -88,7 +88,7 @@ public class ShortUrlServiceImpl implements ShortUrlService {
 
 
     @Override
-    public RedirectView redirectToOriginalUrl(String shortUrl, HttpServletRequest request) {
+    public RedirectionResponse redirectToOriginalUrl(String shortUrl, HttpServletRequest request) {
 
         Long id = coderService.decodeShortUrlToId(shortUrl);
         LongUrl url = urlRepository.findById(id)
@@ -101,9 +101,11 @@ public class ShortUrlServiceImpl implements ShortUrlService {
         if(tokenService.isRequestContainsValidToken(request))
             eventPublisher.publishEvent(new VisitEvent(url));
 
-        RedirectView redirectView = new RedirectView();
-        redirectView.setUrl(url.getLongUrl());
-        return  redirectView;
+        RedirectionResponse redirectionResponse = new RedirectionResponse();
+        redirectionResponse.setUrl(url.getLongUrl());
+        redirectionResponse.setVisitedTimes(url.getVisitedTime());
+
+        return  redirectionResponse;
 
     }
 

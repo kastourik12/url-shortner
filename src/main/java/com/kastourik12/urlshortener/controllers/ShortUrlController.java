@@ -7,11 +7,13 @@ package com.kastourik12.urlshortener.controllers;
 
 import antlr.Token;
 import com.kastourik12.urlshortener.payloads.request.ShortUrlCreationRequest;
+import com.kastourik12.urlshortener.payloads.response.RedirectionResponse;
 import com.kastourik12.urlshortener.payloads.response.ShortUrlCreationResponse;
 import com.kastourik12.urlshortener.services.ShortUrlService;
 import com.kastourik12.urlshortener.services.TokenService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
@@ -39,7 +41,7 @@ public class ShortUrlController {
     }
 
     @GetMapping("/{shortUrl}")
-    public RedirectView getAndRedirect(@PathVariable String shortUrl,HttpServletRequest request){
-        return urlService.redirectToOriginalUrl(shortUrl,request);
+    public ResponseEntity<RedirectionResponse> getAndRedirect(@PathVariable String shortUrl, HttpServletRequest request){
+        return new ResponseEntity<>(urlService.redirectToOriginalUrl(shortUrl,request), HttpStatus.OK);
     }
 }
