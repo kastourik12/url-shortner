@@ -22,5 +22,5 @@ server:
 
 # JWT TOKEN
 rsa:
-  private-key: classpath:certs/private.pem
-  public-key: classpath:certs/public.pem
+  private-key: ${RSA_PRV}
+  public-key: ${RSA_PUB}
