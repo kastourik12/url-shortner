@@ -24,3 +24,6 @@ server:
 rsa:
   private-key: ${RSA_PRV}
   public-key: ${RSA_PUB}
+
+client:
+  host: ${CLIENT_HOST}

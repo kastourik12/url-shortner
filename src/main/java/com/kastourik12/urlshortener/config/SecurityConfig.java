@@ -8,6 +8,7 @@ import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -47,13 +48,16 @@ import java.util.List;
 public class SecurityConfig {
     private final RsaKeyProperties rsaKeyProperties;
 
+    @Value("${client.host}")
+    private String clientHost;
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(UserDetailsService userDetailsService) throws Exception {
+    public AuthenticationManager authenticationManager(UserDetailsService userDetailsService) {
         var authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder());
@@ -80,7 +84,7 @@ public class SecurityConfig {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
 
         corsConfiguration.setAllowCredentials(true);
-        corsConfiguration.setAllowedOrigins(List.of("http://localhost:8080"));
+        corsConfiguration.setAllowedOrigins(List.of(this.clientHost));
         corsConfiguration.setAllowedMethods(List.of(CorsConfiguration.ALL));
         corsConfiguration.setAllowedHeaders(List.of(CorsConfiguration.ALL));
         source.registerCorsConfiguration("/**", corsConfiguration);

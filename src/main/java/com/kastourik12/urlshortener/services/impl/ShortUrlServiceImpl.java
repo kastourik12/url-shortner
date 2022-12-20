@@ -17,6 +17,7 @@ import com.kastourik12.urlshortener.services.ShortUrlService;
 import com.kastourik12.urlshortener.services.TokenService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Async;
@@ -43,6 +44,9 @@ public class ShortUrlServiceImpl implements ShortUrlService {
     private final CoderService coderService;
     private final TokenService tokenService;
     private final ApplicationEventPublisher eventPublisher;
+
+    @Value("${client.host}")
+    private String clientHost;
     
     
 
@@ -79,7 +83,7 @@ public class ShortUrlServiceImpl implements ShortUrlService {
 
         return ShortUrlCreationResponse
                     .builder()
-                    .url("http://localhost:8082/re/" + coderService.codeIdToShortUrl(url.getId()))
+                    .url(clientHost + coderService.codeIdToShortUrl(url.getId()))
                     .shortenedTimes(url.getShortenedTimes())
                     .visitedTimes(url.getVisitedTime())
                     .build();
