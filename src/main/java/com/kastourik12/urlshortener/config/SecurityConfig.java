@@ -37,7 +37,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
-import java.util.Arrays;
+
 import java.util.List;
 
 
@@ -68,12 +68,10 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeRequests( auth ->
-                        auth
-                                .antMatchers("/re/*","/auth/*").permitAll())
+                .authorizeRequests( auth -> auth.antMatchers("/re/*","/auth/*").permitAll())
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
                 .sessionManagement( session  -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .exceptionHandling(  ex  ->
+                .exceptionHandling( ex  ->
                         ex.authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
                         .accessDeniedHandler(new BearerTokenAccessDeniedHandler()))
                 .build();
@@ -82,9 +80,8 @@ public class SecurityConfig {
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-
         corsConfiguration.setAllowCredentials(true);
-        corsConfiguration.setAllowedOrigins(List.of(this.clientHost));
+        corsConfiguration.setAllowedOrigins(List.of("*"));
         corsConfiguration.setAllowedMethods(List.of(CorsConfiguration.ALL));
         corsConfiguration.setAllowedHeaders(List.of(CorsConfiguration.ALL));
         source.registerCorsConfiguration("/**", corsConfiguration);

@@ -20,8 +20,6 @@ public class TokenServiceImpl implements TokenService {
 
     private final JwtEncoder jwtEncoder;
 
-    private final JwtDecoder jwtDecoder;
-
     private final BearerTokenResolver tokenResolver;
 
 
@@ -46,8 +44,8 @@ public class TokenServiceImpl implements TokenService {
     @Override
     public Boolean isRequestContainsValidToken(HttpServletRequest request) {
         try {
-            String token =tokenResolver.resolve(request);
-            return jwtDecoder.decode(token).getExpiresAt().isAfter(Instant.now());
+            tokenResolver.resolve(request);
+            return true;
         }
         catch (Exception e){
             return false;
