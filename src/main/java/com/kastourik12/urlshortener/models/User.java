@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
@@ -19,10 +20,13 @@ public class User implements Serializable {
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
 
-    @Column(unique = true)
+    @Column(unique = true) @Min(value = 6,message = "username should have at least 6 characters ")
     private String username;
-
+    @Min(value = 8,message = "password should have at 8 least characters ")
     private String password;
+    @Email(message = "email should be valid")
+    private String email;
+
 
 
     @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
