@@ -30,15 +30,13 @@ public class UserServiceImpl implements UserService {
         User user = new User();
         user.setUsername(request.getUsername());
         user.setPassword(encoder.encode(request.getPassword()));
-        if(request.getRoles() == null) {
-            Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                    .orElseThrow(() -> new CustomException("Role not found in the database",HttpStatus.NOT_FOUND));
+        Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+                                            .orElseThrow(
+                                                    () ->
+                                                            new CustomException("Role not found in the database",HttpStatus.NOT_FOUND));
             Set<Role> roles = new HashSet<>();
             roles.add(userRole);
             user.setRoles(roles);
-        }else{
-            user.setRoles(getRoles(request.getRoles()));
-        }
         userRepository.save(user);
     }
 
@@ -47,13 +45,4 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByUsername(username).orElseThrow(() -> new CustomException("user with username:" + username ,HttpStatus.NOT_FOUND));
     }
 
-    private Set<Role> getRoles(String [] roles){
-
-        Set<Role> userRoles = new HashSet<>();
-        for(String role : roles) {
-            userRoles.add(roleRepository.findByName(Enum.valueOf(ERole.class,role))
-                    .orElseThrow(() -> new CustomException("Role not found in the database",HttpStatus.NOT_FOUND)));
-        }
-        return userRoles;
-    }
 }

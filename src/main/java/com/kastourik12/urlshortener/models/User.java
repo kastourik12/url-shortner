@@ -16,16 +16,19 @@ import java.util.Set;
 @Table(name = "users")
 @NoArgsConstructor @Getter @Setter
 public class User implements Serializable {
+
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
 
-    @Column(unique = true) @Min(value = 6,message = "username should have at least 6 characters ")
+    @Column(unique = true)
     private String username;
-    @Min(value = 8,message = "password should have at 8 least characters ")
+
     private String password;
-    @Email(message = "email should be valid")
+
+    @Column(unique = true)
     private String email;
+
 
 
 
