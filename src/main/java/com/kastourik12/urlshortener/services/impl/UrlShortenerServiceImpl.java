@@ -55,8 +55,8 @@ public class ShortUrlServiceImpl implements ShortUrlService {
 
         if(isNotValidUrl(payload.getUrl()))
         {
-            String[] u = payload.getUrl().split("\\.");
-            if( u.length  > 1 && !u[0].isEmpty() && !u[1].isEmpty() )
+            String[] payloadUrlStrings = payload.getUrl().split("\\.");
+            if( payloadUrlStrings.length  > 1 && !payloadUrlStrings[0].isEmpty() && !payloadUrlStrings[1].isEmpty() )
                 payload.setUrl("https://" + payload.getUrl());
             if (isNotValidUrl(payload.getUrl()))
                 throw new CustomException("Url should be valid", HttpStatus.BAD_REQUEST);
