@@ -28,6 +28,9 @@ public class LongUrl implements Serializable {
     @CreatedDate
     private Date createdAt;
 
+    @ManyToOne
+    private User createdBy;
+
 
 
 }

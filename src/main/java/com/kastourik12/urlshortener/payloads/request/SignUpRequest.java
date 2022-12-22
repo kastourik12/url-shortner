@@ -1,21 +1,21 @@
 package com.kastourik12.urlshortener.payloads.request;
 
-import lombok.AllArgsConstructor;
+import com.kastourik12.urlshortener.utils.validators.Password;
 import lombok.Data;
-import org.springframework.lang.Nullable;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Size;
 
 
 @Data
 public class SignUpRequest {
-    @NotBlank(message = "username should not be empty")
+    @Size(min = 8,max = 20,message = "username must be between 8 and 20 characters")
     private String username;
-    @NotBlank(message = "password should not be empty")
+    @Password
     private String password;
-    @Nullable
-    private String[] roles;
+    @Email(message = "you must enter a valid Email")
+    private String email;
+
 
     public SignUpRequest(String username, String password) {
         this.username = username;

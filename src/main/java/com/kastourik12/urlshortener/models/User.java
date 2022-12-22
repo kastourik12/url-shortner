@@ -5,8 +5,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -15,6 +13,7 @@ import java.util.Set;
 @Table(name = "users")
 @NoArgsConstructor @Getter @Setter
 public class User implements Serializable {
+
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
@@ -23,6 +22,11 @@ public class User implements Serializable {
     private String username;
 
     private String password;
+
+    @Column(unique = true)
+    private String email;
+
+
 
 
     @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)

@@ -36,9 +36,11 @@ public class AuthServiceImpl implements AuthService {
     public SignInResponse authenticateAndGetJwt(SignInRequest request) {
 
         try{
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getUsername(),request.getPassword()));
+        Authentication authentication = authenticationManager
+                                            .authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(),request.getPassword()));
+
         TokenCreationPayload tokenCreation= tokenService.generateToken(authentication);
+
         return new SignInResponse(tokenCreation.token(),request.getUsername(),tokenCreation.expiresAt());
         }
         catch (RuntimeException e){

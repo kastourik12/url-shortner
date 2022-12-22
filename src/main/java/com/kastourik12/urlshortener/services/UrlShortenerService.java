@@ -6,12 +6,9 @@
 package com.kastourik12.urlshortener.services;
 
 
-import com.kastourik12.urlshortener.models.LongUrl;
 import com.kastourik12.urlshortener.payloads.request.ShortUrlCreationRequest;
 import com.kastourik12.urlshortener.payloads.response.RedirectionResponse;
 import com.kastourik12.urlshortener.payloads.response.ShortUrlCreationResponse;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -20,9 +17,9 @@ import javax.servlet.http.HttpServletRequest;
  * @author ok
  */
 
-public interface ShortUrlService {
+public interface UrlShortenerService {
 
-    ShortUrlCreationResponse convertToShortUrl(ShortUrlCreationRequest longUrl);
+    ShortUrlCreationResponse convertToShortUrl(ShortUrlCreationRequest longUrl,HttpServletRequest request);
 
     RedirectionResponse redirectToOriginalUrl(String shortUrl, HttpServletRequest request);
 

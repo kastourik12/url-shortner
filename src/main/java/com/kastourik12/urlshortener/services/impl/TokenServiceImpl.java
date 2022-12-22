@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 public class TokenServiceImpl implements TokenService {
 
     private final JwtEncoder jwtEncoder;
+    private final JwtDecoder jwtDecoder;
 
     private final BearerTokenResolver tokenResolver;
 
@@ -44,8 +45,8 @@ public class TokenServiceImpl implements TokenService {
     @Override
     public Boolean isRequestContainsValidToken(HttpServletRequest request) {
         try {
-            tokenResolver.resolve(request);
-            return true;
+            String token = tokenResolver.resolve(request);
+            return jwtDecoder.decode(token).getExpiresAt().isAfter(Instant.now());
         }
         catch (Exception e){
             return false;
