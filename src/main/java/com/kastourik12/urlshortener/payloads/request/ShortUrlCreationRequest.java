@@ -1,15 +1,13 @@
 package com.kastourik12.urlshortener.payloads.request;
 
+import com.kastourik12.urlshortener.utils.validators.URL;
 import lombok.*;
-
-import javax.validation.constraints.NotBlank;
 
 @Data
 @AllArgsConstructor @NoArgsConstructor
 public class ShortUrlCreationRequest {
 
-    @NotBlank(message = "url should not be empty")
+    @URL
     private String url;
-
 
 }

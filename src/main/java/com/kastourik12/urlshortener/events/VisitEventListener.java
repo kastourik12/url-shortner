@@ -4,6 +4,7 @@ import com.kastourik12.urlshortener.models.User;
 import com.kastourik12.urlshortener.models.Visit;
 import com.kastourik12.urlshortener.repositories.UserRepository;
 import com.kastourik12.urlshortener.repositories.VisitRepository;
+import com.kastourik12.urlshortener.services.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
@@ -14,7 +15,7 @@ import java.util.Date;
 
 @Component @RequiredArgsConstructor
 public class VisitEventListener {
-    private final UserRepository userRepository;
+    private final AuthService authService;
     private final VisitRepository visitRepository;
 
     @EventListener
@@ -22,8 +23,7 @@ public class VisitEventListener {
     public void handleVisitEvent(VisitEvent event){
         Visit visit = new Visit();
         try{
-            String username = SecurityContextHolder.getContext().getAuthentication().getName();
-            User user = userRepository.findByUsername(username).get();
+            User user = authService.getCurrentUser();
             visit.setUser(user);
         }catch (Exception e){
             visit.setUser(null);

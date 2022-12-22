@@ -5,18 +5,15 @@
 
 package com.kastourik12.urlshortener.controllers;
 
-import antlr.Token;
 import com.kastourik12.urlshortener.payloads.request.ShortUrlCreationRequest;
 import com.kastourik12.urlshortener.payloads.response.RedirectionResponse;
 import com.kastourik12.urlshortener.payloads.response.ShortUrlCreationResponse;
-import com.kastourik12.urlshortener.services.ShortUrlService;
-import com.kastourik12.urlshortener.services.TokenService;
+import com.kastourik12.urlshortener.services.UrlShortenerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -26,18 +23,18 @@ import javax.validation.Valid;
 @RequestMapping("/re")
 @RequiredArgsConstructor
 @Slf4j
-public class ShortUrlController {
+public class UrlShortenerController {
 
     
-    private final ShortUrlService urlService;
+    private final UrlShortenerService urlService;
 
 
     @PostMapping("/create")
-    public ResponseEntity<ShortUrlCreationResponse> convertToShortUrl(@RequestBody @Valid ShortUrlCreationRequest longUrl){
+    public ResponseEntity<ShortUrlCreationResponse> convertToShortUrl(@RequestBody @Valid ShortUrlCreationRequest longUrl, HttpServletRequest request){
 
         log.info(" Trying to create short Url for :" + longUrl.getUrl());
 
-        return ResponseEntity.ok(urlService.convertToShortUrl(longUrl));
+        return ResponseEntity.ok(urlService.convertToShortUrl(longUrl,request));
     }
 
     @GetMapping("/{shortUrl}")

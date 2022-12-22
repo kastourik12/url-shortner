@@ -1,11 +1,10 @@
 spring:
+
   datasource:
     url: jdbc:postgresql://${PGHOST}:${PGPORT}/${PGDATABASE}
     username: ${PGUSER}
     password: ${PGPASSWORD}
     driverClassName: org.postgresql.Driver
-
-
 
   jpa:
     defer-datasource-initialization: true

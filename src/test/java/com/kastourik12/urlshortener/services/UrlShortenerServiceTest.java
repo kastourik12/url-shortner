@@ -4,7 +4,7 @@ import com.kastourik12.urlshortener.exceptions.CustomException;
 import com.kastourik12.urlshortener.models.LongUrl;
 import com.kastourik12.urlshortener.payloads.request.ShortUrlCreationRequest;
 import com.kastourik12.urlshortener.repositories.LongUrlRepository;
-import com.kastourik12.urlshortener.services.impl.ShortUrlServiceImpl;
+import com.kastourik12.urlshortener.services.impl.UrlShortenerServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -17,14 +17,14 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class ShortUrlServiceTest {
+public class UrlShortenerServiceTest {
 
     @Mock
     private LongUrlRepository urlRepository;
     @Mock
     private CoderService coderService;
     @InjectMocks
-    private ShortUrlServiceImpl underTest;
+    private UrlShortenerServiceImpl underTest;
 
     @Test
     public void shouldThrowExceptionWhenUrlIsInvalid(){
