@@ -1,18 +1,19 @@
 package com.kastourik12.urlshortener.payloads.request;
 
+import com.kastourik12.urlshortener.utils.validators.Password;
 import lombok.Data;
 
 import javax.validation.constraints.Email;
-import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 
 
 @Data
 public class SignUpRequest {
-    @Min(value = 6,message = "username should have at least 6 characters ")
+    @Size(min = 8,max = 20,message = "username must be between 8 and 20 characters")
     private String username;
-    @Min(value = 8,message = "password should have at 8 least characters ")
+    @Password
     private String password;
-    @Email(message = "email should be valid")
+    @Email(message = "you must enter a valid Email")
     private String email;
 
 
